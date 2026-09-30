@@ -91,8 +91,11 @@
   // exam.cls sets the answer in \hbox to \answerlinelength{\hfil #1\hss}: centred on the
   // rule, and when it is wider than the rule it starts at the rule and overflows to
   // the right on ONE line — never wrapped.
-  let ans = if ans == none { none }
-    else if measure(ans).width > w { align(left, box(ans)) } else { align(center, box(ans)) }
+  let ans = if ans == none { none } else {
+    let aw = measure(ans).width          // natural single-line width
+    let one-line = box(width: aw, ans)   // a box sized to it cannot wrap
+    if aw > w { align(left, one-line) } else { align(center, one-line) }
+  }
   // exam.cls: \par \nobreak \vskip \answerskip (2ex) then the label and the rule.
   // The trailing space is an explicit v(): a block's `below` is dropped when the
   // answer line is the last thing in a part, which it almost always is.

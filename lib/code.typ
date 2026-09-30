@@ -9,7 +9,10 @@
 //   #verbatim[``` … ```]            plain \begin{verbatim} (no frame, no numbers)
 //   #visible-spaces[``` … ```]      verbatim_lst_spaces (spaces shown as ␣)
 //   #doclisting[``` … ```]          doclisting (\scriptsize, no frame)
-//   #real-verb("…")                 real_verb (\scriptsize, indentation kept)
+//   #real-verb("…")                 real_verb (\scriptsize, indentation kept); spaces: true shows ␣
+//
+// The wrappers set one state for the block(s) they enclose, so they do not nest:
+// pass the options to real-verb() directly instead of wrapping it.
 //
 // The "Listing continues on next page…" notes of mdframed are not reproduced:
 // Typst offers no hook on the fragments of a broken block.
@@ -29,7 +32,7 @@
 #let verbatim = listing.with(frame: false, numbers: false)
 #let visible-spaces = listing.with(spaces: true)
 #let doclisting = listing.with(frame: false, numbers: false, size: size-scriptsize)
-#let real-verb(code, lang: none, size: size-scriptsize) = listing(size: size, numbers: false, raw(code, block: true, lang: lang))
+#let real-verb(code, lang: none, size: size-scriptsize, frame: true, spaces: false) = listing(size: size, numbers: false, frame: frame, spaces: spaces, raw(code, block: true, lang: lang))
 
 // Show rules installed by isc-exam(): `show: listing-rules`.
 #let listing-rules(doc) = {
@@ -45,7 +48,7 @@
     // showspaces=true: re-typeset each line with ␣ for every space (a text show
     // rule does not reach into raw text).
     let lines = if st.spaces {
-      it.text.split("\n").enumerate().map(((i, l)) => (number: i + 1, text: l, body: raw(l.replace(" ", "␣"), lang: it.lang)))
+      it.text.split("\n").enumerate().map(((i, l)) => (number: i + 1, text: l, body: text(font: raw-font, l.replace(" ", "␣"))))
     } else { it.lines }
     let rows = lines.map(l => {
       if numbered {
