@@ -1,0 +1,11 @@
+# build / dev artefacts
+tmp/
+_dev/
+template/*.pdf
+template/*.png
+*.log
+*.pdf.gs
+
+# macOS
+.DS_Store
+._*

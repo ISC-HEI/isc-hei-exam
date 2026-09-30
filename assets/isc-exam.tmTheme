@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<!--
+  isc-exam — the `listings` palette of the ISC LaTeX exam template (options.tex):
+    keywords  #0033B3          strings   #067D17
+    comments  #8C8C8C italic   numbers, identifiers, types: black
+  The LaTeX `scala` language has a single keyword class (val, var, def, if, else,
+  true, false, ...); type names such as Int or String stay black.
+-->
+<dict>
+  <key>name</key>
+  <string>isc-exam</string>
+  <key>settings</key>
+  <array>
+    <dict>
+      <key>settings</key>
+      <dict>
+        <key>background</key>
+        <string>#FFFFFF</string>
+        <key>foreground</key>
+        <string>#000000</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>Keywords</string>
+      <key>scope</key>
+      <string>keyword, keyword.control, keyword.declaration, keyword.other, storage.type.stable, storage.type.volatile, storage.type.function, storage.type.class, storage.type.trait, storage.type.object, storage.modifier, constant.language, variable.language</string>
+      <key>settings</key>
+      <dict>
+        <key>foreground</key>
+        <string>#0033B3</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>Operators stay black</string>
+      <key>scope</key>
+      <string>keyword.operator, punctuation</string>
+      <key>settings</key>
+      <dict>
+        <key>foreground</key>
+        <string>#000000</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>Strings</string>
+      <key>scope</key>
+      <string>string, constant.character, string.quoted, punctuation.definition.string</string>
+      <key>settings</key>
+      <dict>
+        <key>foreground</key>
+        <string>#067D17</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>Comments</string>
+      <key>scope</key>
+      <string>comment, punctuation.definition.comment</string>
+      <key>settings</key>
+      <dict>
+        <key>foreground</key>
+        <string>#8C8C8C</string>
+        <key>fontStyle</key>
+        <string>italic</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>Everything else black</string>
+      <key>scope</key>
+      <string>constant.numeric, constant.other, entity, entity.name, entity.name.function, entity.name.type, support, support.type, support.class, support.function, storage.type.primitive, storage.type.generic, variable, variable.parameter, meta</string>
+      <key>settings</key>
+      <dict>
+        <key>foreground</key>
+        <string>#000000</string>
+      </dict>
+    </dict>
+  </array>
+</dict>
+</plist>

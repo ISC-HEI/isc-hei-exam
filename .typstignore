@@ -1,0 +1,19 @@
+# Files that must NOT be part of the Typst Universe bundle (used by scripts/pack).
+# Patterns match from the repository root; `*` also matches directory separators.
+.github
+.claude
+.vscode
+_dev
+tmp
+tests
+tools
+scripts
+examples
+Justfile
+CONTRIBUTING.md
+CLAUDE.md
+*.code-workspace
+*.pdf
+*.log
+.gitignore
+.gitattributes
