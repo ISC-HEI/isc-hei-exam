@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# template-files — SINGLE SOURCE OF TRUTH for the files the package ships.
+#
+# Sourced by scripts/pack (which keeps ONLY these files) and scripts/check-pack
+# (which verifies the packed set matches), so the two cannot drift.
+#
+# `expected_files` prints, one per line, every package-relative path the bundle
+# must contain. The lib/, assets/ and template/ trees are taken wholesale from
+# the repository, so adding a file there needs no edit here.
+
+TEMPLATE_FILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+
+expected_files() {
+  printf '%s\n' typst.toml lib.typ i18n.json README.md LICENSE CHANGELOG.md thumbnail.png
+  ( cd "$TEMPLATE_FILES_ROOT" && find lib assets template -type f \
+      -not -name '*.pdf' -not -name '*.png.tmp' -not -name '.DS_Store' )
+}

@@ -35,8 +35,8 @@
 
 // Series: geometry{left/right=20mm, top=9mm, bottom=14mm, headheight=9mm,
 // headsep=7mm, foot=10mm, footskip=8mm, includeheadfoot}, one-sided.
-#let series-margin = (x: 20mm, top: 25mm, bottom: 22mm)
-#let series-header-ascent = 5mm
+#let series-margin = (x: 20mm, top: 30mm, bottom: 22mm)   // title baseline at ~33mm (measured)
+#let series-header-ascent = 9mm                             // header rule at ~21mm from the page top
 #let series-footer-descent = 6mm
 
 // ── Question tree indentation (measured on exam3-2025.pdf p2) ─────────────────
@@ -56,8 +56,9 @@
 
 // ── Answer spaces ─────────────────────────────────────────────────────────────
 #let line-fill-height = 0.25in      // \linefillheight = \dottedlinefillheight
-#let answer-line-length-exam = 3cm      // \setlength\answerlinelength{3cm}
-#let answer-line-length-series = 5.5cm  // series preamble, answers mode
+#let answer-line-length-exam = 3cm      // \setlength\answerlinelength{3cm}, both versions
+#let answer-line-length-series = 1in    // exam.cls default (series hand-out)
+#let answer-line-length-series-sol = 5.5cm  // series preamble sets 5.5cm in answers mode only
 #let solution-stroke = 0.4pt        // TheSolution \fbox rule (0.4pt = \fboxrule)
 
 // ── Listings (options.tex, listings + mdframed) ───────────────────────────────

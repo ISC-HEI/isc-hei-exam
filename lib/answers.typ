@@ -26,14 +26,6 @@
 #let dotted-leader = box(width: 100%, repeat([.], gap: 0.3em))
 #let solid-leader = line(length: 100%, stroke: 0.4pt + black)
 
-// Lay `body` out at the current level's indent: as is inside a body, shifted
-// right (without a container, so a 1fr height keeps LaTeX glue semantics) when
-// written at the top level.
-#let at-level(body) = context {
-  let ind = top-level-indent()
-  if ind == 0mm { body } else { align(right, box(width: 100% - ind, body)) }
-}
-
 // A block of `height` filled with `leader` every \linefillheight (0.25in).
 #let fill-with(height, leader) = context {
   let ind = top-level-indent()

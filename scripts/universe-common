@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Shared settings for the Typst Universe release scripts. Sourced, not run.
+set -eu
+. "$(dirname "${BASH_SOURCE[0]}")/setup"
+
+# Sparse clone of the typst/packages fork (shared with the other ISC packages).
+CLONE_DIR="${UNIVERSE_CLONE:-$HOME/git/typst-packages}"
+FORK="pmudry/packages"
+UPSTREAM="typst/packages"
+BRANCH="$PKG_NAME-$VERSION"
+SPARSE_PATH="packages/preview/$PKG_NAME"

@@ -53,7 +53,8 @@
   let logo = if logo == auto { image("../assets/isc_logo.svg") } else { logo }
   let footer-logo = if footer-logo == auto { image("../assets/hesso_valais.svg") } else { footer-logo }
   let all = if answer-line-length == auto {
-    if is-exam { answer-line-length-exam } else { answer-line-length-series }
+    if is-exam { answer-line-length-exam }
+    else if sol { answer-line-length-series-sol } else { answer-line-length-series }
   } else { answer-line-length }
 
   // ── Document, text, paragraphs ────────────────────────────────────────────
@@ -63,8 +64,10 @@
   // LaTeX never turns straight quotes into guillemets; neither do we.
   set smartquote(enabled: false)
   // babel-french itemize marker is an en dash; \itemsep + \parsep ≈ 8pt.
-  set list(marker: if lang == "fr" { [–] } else { [•] }, indent: 0em, body-indent: 1.1em, spacing: 0.95em)
-  set enum(indent: 0em, body-indent: 0.8em, spacing: 0.95em)
+  set list(marker: if lang == "fr" { [–] } else { [•] }, indent: 0em, body-indent: 1.1em, spacing: 0.8em)
+  set enum(indent: 0em, body-indent: 0.8em, spacing: 0.8em)
+  show list: set block(above: 0.9em, below: 0.9em)   // \topsep
+  show enum: set block(above: 0.9em, below: 0.9em)
   show link: set text(fill: url-color)
   set heading(numbering: none, outlined: false)
 
@@ -131,7 +134,6 @@
         linebreak()
         text(size: size-large, style: "italic", course)
       })
-      v(0.8em)
       body
     }
   }

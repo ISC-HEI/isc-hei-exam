@@ -1,0 +1,5 @@
+# <name> <pages> — the LaTeX references have the same counts (tests/reference/)
+exam 12
+exam-sol 12
+series 4
+series-sol 4

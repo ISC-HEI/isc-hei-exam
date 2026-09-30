@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Point @preview/<name>/<version> at this repository, so that
+# `#import "@preview/isc-hei-exam:<version>"` resolves to the live source.
+#
+#   scripts/dev_link            → @preview (what `just dev` does)
+#   scripts/dev_link @local     → @local
+set -eu
+. "$(dirname "${BASH_SOURCE[0]}")/setup"
+
+TARGET_DIR="$(resolve-target "${1:-@preview}")"
+DEST="$TARGET_DIR/$PKG_NAME"
+
+# Clear the version path FIRST: it may be a stale symlink, a dangling one, or a
+# real packed dir left by a previous `pack`. `ln -sf` onto an existing real dir
+# would nest the link INSIDE it instead of replacing it.
+mkdir -p "$DEST"
+rm -rf "${DEST:?}/${VERSION:?}"
+ln -s "$ROOT" "$DEST/$VERSION"
+echo "Dev symlink: $DEST/$VERSION -> $ROOT"

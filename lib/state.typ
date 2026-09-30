@@ -8,8 +8,10 @@
 #let solutions-state = state("isc-exam-solutions", false)
 
 // Document configuration (kind, lang, title, ...). Read with cfg("key").
+// The state is written once by isc-exam(); `final()` lets the page-1 header,
+// laid out before that update, see it too.
 #let cfg-state = state("isc-exam-cfg", (:))
-#let cfg(key, default: none) = cfg-state.get().at(key, default: default)
+#let cfg(key, default: none) = cfg-state.final().at(key, default: default)
 
 // UI strings in the document's UI language. Must be called inside `context`.
 #let ui(key, params: (:)) = i18n(cfg("ui-lang", default: "fr"), key, extra-i18n: cfg("extra-i18n"), params: params)
@@ -28,6 +30,13 @@
 // (0mm at the top level of the document).
 #let indent-state = state("isc-indent", 0mm)
 
+// Where the label of a subpart sits: after the part label when a part is
+// open, at the question text level when subparts follow the question directly.
+#let subpart-base() = {
+  import "settings.typ": question-indent, part-label-width
+  if part-counter.get().first() > 0 { question-indent + part-label-width } else { question-indent }
+}
+
 // Indent that a top-level element (one written after a question / part /
 // subpart call, not inside it) must add to line up with that level's text.
 // Inside a body nothing is added: the container already indents.
@@ -36,8 +45,16 @@
   if indent-state.get() > 0mm { return 0mm }
   let lvl = level-state.get()
   if lvl == "part" { question-indent + part-label-width }
-  else if lvl == "subpart" { question-indent + part-label-width + subpart-label-width }
+  else if lvl == "subpart" { subpart-base() + subpart-label-width }
   else { question-indent }
+}
+
+// Lay `body` out at the current level's indent: unchanged inside a body,
+// shifted right when written at the top level. (Do not use for 1fr-high
+// blocks: the wrapper is a container; see answers.typ.)
+#let at-level(body) = context {
+  let ind = top-level-indent()
+  if ind == 0mm { body } else { align(right, block(width: 100% - ind, align(left, body))) }
 }
 
 // Label carried by every points record (see points.typ).

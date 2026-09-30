@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Shared settings for the package scripts. Sourced, not run.
+# Adapted from the isc-hei-typst-templates monorepo (itself after cetz's
+# scripts/package, Apache-2.0).
+
+# Local Typst package directories per platform.
+if [[ "$OSTYPE" == "linux"* ]]; then
+  DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  DATA_DIR="$HOME/Library/Application Support"
+else
+  DATA_DIR="${APPDATA}"
+fi
+
+# read-toml <file> <key>: value of a `key = "value"` line, quotes stripped.
+read-toml() { perl -lne "print \"\$1\" if /^$2\\s*=\\s*\"(.*)\"/" < "$1"; }
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"   # macOS has no realpath
+PKG_NAME="$(read-toml "$ROOT/typst.toml" name)"
+VERSION="$(read-toml "$ROOT/typst.toml" version)"
+
+# resolve-target @local | @preview | <dir>
+resolve-target() {
+  case "$1" in
+    @local)   echo "${DATA_DIR}/typst/packages/local" ;;
+    @preview) echo "${DATA_DIR}/typst/packages/preview" ;;
+    *)        echo "$1" ;;
+  esac
+}

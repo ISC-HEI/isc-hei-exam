@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Stage a Typst Universe release, stopping short of pushing:
+#   1. sparse-clone the fork (or reuse it)
+#   2. base a fresh branch <name>-<version> on current upstream/main
+#   3. pack the package into packages/preview/<name>/<version>
+#   4. validate it with typst-package-check
+#   5. commit
+# Then `just universe-push`.
+. "$(dirname "${BASH_SOURCE[0]}")/universe-common"
+
+if [[ ! -d "$CLONE_DIR/.git" ]]; then
+  echo "Sparse-cloning $FORK into $CLONE_DIR ..."
+  git clone --depth 1 --no-checkout --filter=tree:0 "https://github.com/$FORK.git" "$CLONE_DIR"
+  git -C "$CLONE_DIR" sparse-checkout init
+  git -C "$CLONE_DIR" sparse-checkout set "$SPARSE_PATH"
+  git -C "$CLONE_DIR" remote add upstream "https://github.com/$UPSTREAM.git"
+  git -C "$CLONE_DIR" config remote.upstream.partialclonefilter tree:0
+  git -C "$CLONE_DIR" checkout main
+else
+  echo "Reusing clone at $CLONE_DIR"
+  git -C "$CLONE_DIR" sparse-checkout set "$SPARSE_PATH"
+fi
+
+echo "Basing $BRANCH on upstream/main ..."
+git -C "$CLONE_DIR" fetch upstream main
+git -C "$CLONE_DIR" switch -C "$BRANCH" upstream/main
+
+"$ROOT/scripts/pack" "$CLONE_DIR/packages/preview"
+"$ROOT/scripts/universe-check"
+
+cd "$CLONE_DIR"
+git add "$SPARSE_PATH"
+if git diff --cached --quiet; then
+  echo "Nothing changed — $BRANCH already matches the packed output."
+else
+  git commit -q -m "$PKG_NAME:$VERSION"
+fi
+echo
+echo "Staged branch '$BRANCH' in $CLONE_DIR:"
+git diff --stat upstream/main.."$BRANCH" | tail -1
+echo "Review it, then 'just universe-push'."

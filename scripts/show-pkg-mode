@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Print whether @preview/<name>:<version> resolves via the dev symlink, a packed
+# artefact, or nothing at all.
+set -euo pipefail
+. "$(dirname "${BASH_SOURCE[0]}")/setup"
+
+P="$(resolve-target @preview)/$PKG_NAME/$VERSION"
+if [[ -L "$P" ]]; then
+  echo "  [dev symlink] @preview/$PKG_NAME:$VERSION → $(readlink "$P")"
+elif [[ -d "$P" ]]; then
+  echo "  [packed]      @preview/$PKG_NAME:$VERSION → $P"
+else
+  echo "  [warning] @preview/$PKG_NAME:$VERSION not installed locally — run 'just dev' or 'just pack'" >&2
+fi

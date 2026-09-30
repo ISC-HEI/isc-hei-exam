@@ -17,14 +17,14 @@
 #let as-item(c) = if type(c) == dictionary { c } else { (correct: false, body: c) }
 
 // \begin{checkboxes} — one choice per line.
-#let checkboxes(..items) = context {
+#let checkboxes(..items) = at-level(context {
   let sol = solutions-state.get()
   block(width: 100%, above: 0.5em, below: 0.5em, inset: (left: 2em),
     stack(spacing: 0.55em, ..items.pos().map(as-item).map(c =>
       grid(columns: (1.4em, 1fr),
         checkbox(checked: sol and c.correct),
         if sol and c.correct { strong(c.body) } else { c.body }))))
-}
+})
 
 // \begin{oneparcheckboxes} — choices inline, in the running paragraph.
 #let inline-checkboxes(..items) = context {
@@ -35,8 +35,8 @@
 }
 
 // \dash: the hairline dashed rule between true/false rows (\hdashrule 0.25pt).
-#let dash-rule() = block(width: 100%, above: 0pt, below: 0pt,
-  line(length: 100%, stroke: (thickness: 0.25pt, dash: "densely-dashed", paint: black)))
+#let dash-rule() = at-level(block(width: 100%, above: 0pt, below: 0pt,
+  line(length: 100%, stroke: (thickness: 0.25pt, dash: "densely-dashed", paint: black))))
 
 // \begintruefalse — the leading rule.
 #let begin-true-false() = { dash-rule(); v(-1mm) }
@@ -44,7 +44,7 @@
 // \truefalse{statement}{true|false}: statement on the left, a small
 // "True | False" table with two boxes on the right; the solution marks the
 // answer with ⊗. `answer` may be a bool, "true"/"false" or [true]/[false].
-#let true-false(statement, answer) = context {
+#let true-false(statement, answer) = at-level(context {
   let ans = if type(answer) == bool { answer }
     else if type(answer) == str { lower(answer) == "true" }
     else { lower(repr(answer).replace("[", "").replace("]", "")) == "true" }
@@ -59,4 +59,4 @@
         stroke: (x, y) => if x == 0 { (right: 0.4pt + black) } else { none },
         emph(ui("true")), emph(ui("false")), mark(true), mark(false))))
   dash-rule()
-}
+})

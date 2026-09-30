@@ -122,11 +122,13 @@
   context {
     let applied = indent-state.get()
     let kind = cfg("kind")
-    let target = question-indent + part-label-width
+    let target = subpart-base()
     block(width: 100%, inset: (left: target - applied), above: part-below, below: part-below,
       grid(columns: (subpart-label-width, 1fr),
         {
-          if points != none and kind == "exam" { margin-points(points, bonus, depth: 1) }
+          if points != none and kind == "exam" {
+            margin-points(points, bonus, depth: if part-counter.get().first() > 0 { 1 } else { 0 })
+          }
           numbering(cfg("subpart-numbering", default: "1)"), subpart-counter.get().first())
         },
         {

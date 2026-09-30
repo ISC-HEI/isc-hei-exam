@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# Pack the package into <target>/<name>/<version> — the real Universe artefact.
+#
+#   scripts/pack @preview                      → local @preview (replaces the dev symlink)
+#   scripts/pack ~/git/typst-packages/packages/preview   → into the registry fork
+#
+# Files are copied except those excluded by .typstignore, then pruned to the
+# allow-list of scripts/template-files.
+set -eu
+. "$(dirname "${BASH_SOURCE[0]}")/setup"
+. "$(dirname "${BASH_SOURCE[0]}")/template-files"
+
+TARGET="$(resolve-target "${1:?Missing target: @local, @preview or a directory}")"
+cd "$ROOT"
+
+# .typstignore patterns (comments and blank lines dropped).
+ignores=()
+while IFS= read -r line; do
+  [[ "$line" =~ ^[[:space:]]*# ]] && continue
+  [[ -z "${line//[[:blank:]]/}" ]] && continue
+  ignores+=("$line")
+done < .typstignore
+
+ignored() {  # <./path> → 0 if a pattern matches
+  local f="$1" pat
+  for pat in "${ignores[@]}"; do
+    # shellcheck disable=SC2053
+    [[ "$f" == ./$pat ]] && return 0
+  done
+  return 1
+}
+
+# Recursively list files that are not ignored.
+enumerate() {
+  local root="$1" f
+  if [[ -f "$root" ]]; then echo "$root"; return; fi
+  while IFS= read -r f; do
+    ignored "$f" && continue
+    enumerate "$f"
+  done < <(find "$root" -mindepth 1 -maxdepth 1 -not -name .git -not -name .typstignore | LC_ALL=C sort)
+}
+
+TMP="$(mktemp -d)"
+while IFS= read -r f; do
+  mkdir -p "$TMP/$(dirname "$f")"
+  cp "$f" "$TMP/$f"
+done < <(enumerate .)
+
+# Prune to the required-file set.
+allow="$(expected_files | LC_ALL=C sort -u)"
+while IFS= read -r f; do
+  rel="${f#"$TMP"/}"
+  if ! grep -qxF -- "$rel" <<< "$allow"; then
+    echo "  pruning $rel"
+    rm -f "$f"
+  fi
+done < <(find "$TMP" -type f)
+find "$TMP" -type d -empty -delete
+
+DEST="${TARGET:?}/${PKG_NAME:?}/${VERSION:?}"
+if rm -r "${DEST:?}" 2>/dev/null; then echo "Overwriting existing $DEST"; fi
+mkdir -p "$DEST"
+shopt -s dotglob
+mv "$TMP"/* "$DEST"
+rmdir "$TMP"
+echo "Packaged to: $DEST"

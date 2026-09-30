@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Remove every installed version of the package (symlinks and packed dirs) from
+# @preview (default) or @local, so the registry package takes over again.
+set -eu
+. "$(dirname "${BASH_SOURCE[0]}")/setup"
+
+TARGET="$(resolve-target "${1:-@preview}")/$PKG_NAME"
+if [[ ! -e "$TARGET" ]]; then
+  echo "Nothing installed at $TARGET"
+elif rm -r "${TARGET:?}"; then
+  echo "Removed $TARGET"
+fi

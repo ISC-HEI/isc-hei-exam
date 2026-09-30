@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Validate the packed package in the fork clone with typst-package-check
+# (github.com/typst/package-check). Fails only on errors; warnings are printed.
+. "$(dirname "${BASH_SOURCE[0]}")/universe-common"
+
+command -v typst-package-check >/dev/null || {
+  echo "typst-package-check not found — install it: cargo install --locked --git https://github.com/typst/package-check" >&2
+  exit 1
+}
+[[ -d "$CLONE_DIR/packages" ]] || { echo "No clone at $CLONE_DIR — run 'just universe-stage' first." >&2; exit 1; }
+
+cd "$CLONE_DIR/packages"
+echo "──────── $PKG_NAME:$VERSION ────────"
+out="$(typst-package-check check --json "@preview/$PKG_NAME:$VERSION" 2>/dev/null || true)"
+if [[ -z "$out" ]]; then echo "  clean"; exit 0; fi
+errors=$(printf '%s\n' "$out" | python3 -c '
+import sys, json
+errors = 0
+for line in sys.stdin:
+    line = line.strip()
+    if not line: continue
+    try: d = json.loads(line)
+    except json.JSONDecodeError: print("  ?? " + line); continue
+    kind = d.get("kind", "?")
+    print(f"  [{kind}] {d.get(\"message\", \"\")}  ({d.get(\"file\", \"\")}: {d.get(\"code\", \"\")})")
+    errors += kind == "error"
+print(errors)' | tee /dev/stderr | tail -1)
+[[ "$errors" == 0 ]] || { echo "Errors must be fixed before pushing." >&2; exit 1; }

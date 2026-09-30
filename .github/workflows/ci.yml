@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install fonts and tools
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q fonts-adobe-sourcesans3 fonts-dejavu-core poppler-utils imagemagick just
+          fc-cache -f
+
+      - uses: typst-community/setup-typst@v4
+        with:
+          typst-version: "0.14.2"
+
+      - name: Link @preview to the checkout
+        run: ./scripts/dev_link @preview
+
+      - name: Compile the starters (student + solutions)
+        run: just compile-all
+
+      - name: Smoke tests (typst init + page counts)
+        run: ./scripts/test-exam.sh
+
+      - name: Bundle check
+        run: ./scripts/check-pack
+
+      - name: Compare with the LaTeX references
+        run: |
+          DPI=80 ./tools/compare-exam.sh template/exam.typ tests/reference/exam-sample.pdf tests/reference/exam-sample-sol.pdf out/exam
+          DPI=80 ./tools/compare-exam.sh template/series.typ tests/reference/serie-sample.pdf tests/reference/serie-sample-sol.pdf out/series
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pdfs-and-comparisons
+          path: |
+            examples/*.pdf
+            out/**/compare-*.png
+          retention-days: 14
