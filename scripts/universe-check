@@ -13,16 +13,26 @@ cd "$CLONE_DIR/packages"
 echo "──────── $PKG_NAME:$VERSION ────────"
 out="$(typst-package-check check --json "@preview/$PKG_NAME:$VERSION" 2>/dev/null || true)"
 if [[ -z "$out" ]]; then echo "  clean"; exit 0; fi
-errors=$(printf '%s\n' "$out" | python3 -c '
+
+# One JSON diagnostic per line; print them all, count the errors.
+errors="$(printf '%s\n' "$out" | python3 -c '
 import sys, json
 errors = 0
 for line in sys.stdin:
     line = line.strip()
-    if not line: continue
-    try: d = json.loads(line)
-    except json.JSONDecodeError: print("  ?? " + line); continue
+    if not line:
+        continue
+    try:
+        d = json.loads(line)
+    except json.JSONDecodeError:
+        print("  ?? " + line)
+        continue
     kind = d.get("kind", "?")
-    print(f"  [{kind}] {d.get(\"message\", \"\")}  ({d.get(\"file\", \"\")}: {d.get(\"code\", \"\")})")
-    errors += kind == "error"
-print(errors)' | tee /dev/stderr | tail -1)
-[[ "$errors" == 0 ]] || { echo "Errors must be fixed before pushing." >&2; exit 1; }
+    print("  [%s] %s  (%s: %s)" % (kind, d.get("message", ""), d.get("file", ""), d.get("code", "")))
+    if kind == "error":
+        errors += 1
+print("ERRORS=%d" % errors)
+')"
+printf '%s\n' "$errors" | grep -v '^ERRORS='
+n="$(printf '%s\n' "$errors" | sed -n 's/^ERRORS=//p')"
+[[ "$n" == 0 ]] || { echo "Errors must be fixed before pushing." >&2; exit 1; }

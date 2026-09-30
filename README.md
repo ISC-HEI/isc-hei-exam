@@ -7,7 +7,7 @@
 
 [![CI](https://github.com/ISC-HEI/isc-hei-exam/actions/workflows/ci.yml/badge.svg)](https://github.com/ISC-HEI/isc-hei-exam/actions/workflows/ci.yml)
 [![Typst Universe](https://img.shields.io/badge/Typst%20Universe-isc--hei--exam-239dad?logo=typst&logoColor=white)](https://typst.app/universe/package/isc-hei-exam)
-[![License: MIT](https://img.shields.io/badge/license-MIT-brightgreen)](./LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-brightgreen)](https://github.com/ISC-HEI/isc-hei-exam/blob/main/LICENSE)
 
 # isc-hei-exam — written exams and exercise series
 
@@ -17,9 +17,9 @@ The [Typst](https://typst.app/) template for written exams and exercise series o
 
 | Cover | Questions | Solutions |
 |:---:|:---:|:---:|
-| <a href="./examples/exam.pdf"><img src="./thumbnail.png" width="230" alt="Cover of the sample exam"></a> | <a href="./examples/exam.pdf">exam.pdf</a> — 12 pages, the student version | <a href="./examples/exam-sol.pdf">exam-sol.pdf</a> — the same source with the answers |
+| <a href="https://github.com/ISC-HEI/isc-hei-exam/blob/main/examples/exam.pdf?raw=true"><img src="thumbnail.png" width="230" alt="Cover of the sample exam"></a> | <a href="https://github.com/ISC-HEI/isc-hei-exam/blob/main/examples/exam.pdf?raw=true">exam.pdf</a> — 12 pages, the student version | <a href="https://github.com/ISC-HEI/isc-hei-exam/blob/main/examples/exam-sol.pdf?raw=true">exam-sol.pdf</a> — the same source with the answers |
 
-The series flavour: [`series.pdf`](./examples/series.pdf) and [`series-sol.pdf`](./examples/series-sol.pdf).
+The series flavour: [`series.pdf`](https://github.com/ISC-HEI/isc-hei-exam/blob/main/examples/series.pdf?raw=true) and [`series-sol.pdf`](https://github.com/ISC-HEI/isc-hei-exam/blob/main/examples/series-sol.pdf?raw=true).
 
 ## Features
 
@@ -133,7 +133,7 @@ Known differences: the "Listing continues on next page…" notes of `mdframed` a
 tools/compare-exam.sh exam.typ reference.pdf reference-sol.pdf
 ```
 
-renders the Typst document in both modes next to the LaTeX PDFs, one PNG per page (LaTeX left, Typst right), compares the page counts and the question structure of every page. See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the development and release workflow.
+renders the Typst document in both modes next to the LaTeX PDFs, one PNG per page (LaTeX left, Typst right), compares the page counts and the question structure of every page. See [`CONTRIBUTING.md`](https://github.com/ISC-HEI/isc-hei-exam/blob/main/CONTRIBUTING.md) for the development and release workflow.
 
 ## Dependencies
 
@@ -152,7 +152,7 @@ Only Typst is needed to write exams. The rest serves the development and the com
 
 ## License
 
-Copyright © 2026 P.-A. Mudry / ISC — HES-SO Valais. Released under the [MIT License](./LICENSE). The ISC and HES-SO logos shipped in `assets/` are the marks of their institutions and are not covered by that licence.
+Copyright © 2026 P.-A. Mudry / ISC — HES-SO Valais. Released under the [MIT License](https://github.com/ISC-HEI/isc-hei-exam/blob/main/LICENSE). The ISC and HES-SO logos shipped in `assets/` are the marks of their institutions and are not covered by that licence.
 
 ---
 
