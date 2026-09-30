@@ -42,19 +42,23 @@
   show raw.where(block: true): it => context {
     let st = listing-state.get()
     let numbered = if st.numbers == auto { it.lang != none } else { st.numbers }
-    let rows = it.lines.map(l => {
+    // showspaces=true: re-typeset each line with ␣ for every space (a text show
+    // rule does not reach into raw text).
+    let lines = if st.spaces {
+      it.text.split("\n").enumerate().map(((i, l)) => (number: i + 1, text: l, body: raw(l.replace(" ", "␣"), lang: it.lang)))
+    } else { it.lines }
+    let rows = lines.map(l => {
       if numbered {
         place(top + left, dx: -(listing-numbersep + 1.6em), dy: 0.1em,
           box(width: 1.6em, align(right,
             text(font: body-font, size: listing-numbers-size, fill: listing-numbers, str(l.number)))))
       }
       // An empty line would collapse to zero height in the stack.
-      if l.text == "" { hide[.] } else { l }
+      if l.text == "" { hide[.] } else if st.spaces { l.body } else { l }
     })
     let content = {
       set text(font: raw-font, size: if st.size == auto { raw-size } else { listing-scale * st.size })
       set par(justify: false)
-      show " ": if st.spaces { text[␣] } else { " " }
       // LaTeX keeps the 12pt baselineskip of the body for 8.5pt code.
       stack(dir: ttb, spacing: listing-line-gap, ..rows)
     }

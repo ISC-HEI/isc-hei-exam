@@ -45,7 +45,7 @@
   // \vspace*{top-space} then the ruled title block.
   v(exam-first-page-extra-top + top-space)
   hrule()
-  v(0.9em)
+  v(1.4em)   // rule → title baseline 11.6mm (measured)
   align(center, {
     set par(leading: 0.55em)
     text(size: size-huge, smallcaps(cfg("title")))
@@ -59,9 +59,9 @@
       text(size: size-Large, style: "italic", cfg("course"))
     }
   })
-  v(0.9em)
+  v(0.35em)   // title baseline → rule 8.4mm (measured)
   hrule()
-  v(2.5cm)
+  v(2.5cm + 1.8mm)   // \vspace{2.5cm} + the center env's skips (measured: rule → box 28.7mm)
 
   if instructions != none {
     title-box({
@@ -72,7 +72,7 @@
         v(3mm)
         text(size: size-small, points.exam-summary())
       })
-      v(5mm)
+      v(3.5mm)
     })
   }
   v(10pt)

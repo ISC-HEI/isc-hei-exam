@@ -28,7 +28,7 @@
   if p > 1 {
     set text(size: size-small)
     if calc.even(p) { align(left, cfg("date")) } else { align(right, smallcaps(cfg("title"))) }
-    v(0.45em)   // headheight=6mm: the rule sits at the bottom of the header box
+    v(-0.2em)   // \runningheadrule sits 1mm under the header baseline (measured)
     rule()
   }
 }
@@ -37,7 +37,7 @@
   let p = counter(page).get().first()
   let last = counter(page).final().first()
   rule()
-  v(-0.3em)
+  v(if p == 1 { -0.05em } else { 0.15em })   // \footrule to footer baseline: 5.2mm; p1 sits 1.4mm higher (measured)
   set text(size: size-small)
   let cols = (1fr, auto, 1fr)
   if p == 1 {

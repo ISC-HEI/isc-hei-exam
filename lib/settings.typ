@@ -29,9 +29,9 @@
 // Body bottom measured at 21.5mm from the page bottom on exam3-2025 (which
 // uses \extrafootheight{-2mm}); the sample exam uses -5mm, hence 18.5-19mm.
 #let exam-margin = (inside: 21mm, outside: 16mm, top: 21mm, bottom: 19mm)
-#let exam-first-page-extra-top = 11.7mm     // \extraheadheight[0.5cm]{-0.2cm} + \vspace* offsets (measured on the cover)
-#let exam-header-ascent = 5.8mm             // header rule at 15.2mm from the page top (measured)
-#let exam-footer-descent = 6.5mm            // footer baseline at ~7.2mm from the page bottom (measured)
+#let exam-first-page-extra-top = 10.4mm     // \extraheadheight[0.5cm]{-0.2cm} + \vspace* offsets (measured: cover rules at 46.5 / 66.6mm)
+#let exam-header-ascent = 7.1mm             // header rule at 13.9mm from the page top (measured)
+#let exam-footer-descent = 9mm              // gap body bottom → \footrule: rule at 287.0mm, baseline at 292.2mm (measured)
 
 // Series: geometry{left/right=20mm, top=9mm, bottom=14mm, headheight=9mm,
 // headsep=7mm, foot=10mm, footskip=8mm, includeheadfoot}, one-sided.

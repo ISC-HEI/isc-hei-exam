@@ -62,7 +62,7 @@
     columns: if combined { 4 } else { 3 },
     align: center + horizon,
     stroke: 0.4pt + black,
-    inset: (x: 7pt, y: 6pt),
+    inset: (x: 7pt, y: 5.85pt),   // row pitch 6.44mm (measured)
     ..cells(ui("grade-question"), ui("grade-points"), ui("grade-bonus"), ui("grade-score")),
     ..rows.map(r => cells(r.title, fmt-points(r.points), fmt-points(r.bonus), [])).flatten(),
     ..cells(ui("grade-total"), fmt-points(total-points), fmt-points(total-bonus), []),

@@ -11,10 +11,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install fonts and tools
+      - name: Install tools
         run: |
           sudo apt-get update -q
-          sudo apt-get install -y -q fonts-adobe-sourcesans3 fonts-dejavu-core poppler-utils imagemagick just
+          sudo apt-get install -y -q fonts-dejavu-core poppler-utils imagemagick just unzip
+
+      - name: Install Source Sans 3 (Adobe release, OFL)
+        run: |
+          mkdir -p ~/.local/share/fonts
+          curl -sSL -o /tmp/ss.zip https://github.com/adobe-fonts/source-sans/releases/download/3.052R/OTF-source-sans-3.052R.zip
+          unzip -q -o /tmp/ss.zip -d /tmp/ss
+          find /tmp/ss -name '*.otf' -exec cp {} ~/.local/share/fonts/ \;
           fc-cache -f
 
       - uses: typst-community/setup-typst@v4
@@ -22,7 +29,9 @@ jobs:
           typst-version: "0.14.2"
 
       - name: Link @preview to the checkout
-        run: ./scripts/dev_link @preview
+        run: |
+          ./scripts/dev_link @preview
+          typst fonts | grep -i "source sans" || (echo "Source Sans not visible to typst" && exit 1)
 
       - name: Compile the starters (student + solutions)
         run: just compile-all

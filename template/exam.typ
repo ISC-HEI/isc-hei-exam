@@ -31,9 +31,9 @@
   name-fields: (labels: ([Nom :], [Prénom :]), x: 21mm, y: 10.7mm, gap: 8mm, width: 8cm, size: 12pt),
   instructions: [
     #text(size: 12pt)[*Consigne : *]
-    #v(0.6em)
+    #v(0.35em)
     Lisez attentivement la donnée et répondez de manière *lisible* aux questions. Vous avez droit pour cet examen à un aide-mémoire de 1 pages (1 feuille recto). Aucun moyen électronique n'est permis.
-    #v(0.6em)
+    #v(0.35em)
     Un conseil : ne restez pas bloqués sur une question. Répondez tout d'abord aux questions avec lesquelles vous êtes à l'aise et revenez ensuite aux questions posant problème. Le barème indiqué est indicatif.
   ],
 )
