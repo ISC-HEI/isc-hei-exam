@@ -123,7 +123,7 @@
     let applied = indent-state.get()
     let kind = cfg("kind")
     let target = subpart-base()
-    block(width: 100%, inset: (left: target - applied), above: part-below, below: part-below,
+    block(width: 100%, inset: (left: target - applied), above: subpart-gap, below: subpart-gap,
       grid(columns: (subpart-label-width, 1fr),
         {
           if points != none and kind == "exam" {

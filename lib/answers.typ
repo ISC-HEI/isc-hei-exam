@@ -89,6 +89,9 @@
     else { none }
   let ans = if solutions-state.get() and answer != none { strong(answer) } else { none }
   // exam.cls: \par \nobreak \vskip \answerskip (2ex) then the label and the rule.
-  block(width: 100%, above: 1.3em, below: 0.8em,
+  // The trailing space is an explicit v(): a block's `below` is dropped when the
+  // answer line is the last thing in a part, which it almost always is.
+  block(width: 100%, above: 1.3em, below: 0pt,
     align(right, box[#label#h(0.3em)#box(width: w, stroke: (bottom: 0.4pt + black), inset: (bottom: 1.5pt), align(center, ans))]))
+  v(0.7em)
 }

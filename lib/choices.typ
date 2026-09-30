@@ -3,12 +3,22 @@
 #import "settings.typ": *
 #import "state.typ": *
 
-// A drawn square box (font independent): \checkboxchar{$\Box$}, filled when
-// checked (\checkedchar{$\blacksquare$}).
-#let checkbox(checked: false, size: 0.8em) = box(
-  width: size, height: size, stroke: 0.5pt + black, baseline: 0.05em,
-  fill: if checked { black } else { none },
-)
+// A drawn checkbox (font independent). `shape: "square"` is \checkboxchar{$\Box$}
+// (stacked `checkboxes`), `shape: "circle"` is the $\bigcirc$ of `oneparcheckboxes`;
+// a checked box is filled (\checkedchar{$\blacksquare$}). Sizes measured on the
+// LaTeX references.
+#let checkbox(checked: false, shape: "square", size: auto) = {
+  let s = if size != auto { size } else if shape == "circle" { 0.95em } else { 0.68em }
+  let fill = if checked { black } else { none }
+  if shape == "circle" and checked {
+    // exam.cls \CorrectChoice in oneparcheckboxes: the $\surd$ mark replaces the circle
+    box(width: s, align(center, text(size: 1.2em)[√]))
+  } else if shape == "circle" {
+    box(baseline: 0.15em, circle(radius: s / 2, stroke: 0.5pt + black, fill: none))
+  } else {
+    box(width: s, height: s, stroke: 0.5pt + black, baseline: 0.03em, fill: fill)
+  }
+}
 
 // Items of checkboxes(): plain content is a wrong choice; correct-choice[...]
 // marks the right one(s). choice[...] is optional sugar.
@@ -16,23 +26,23 @@
 #let correct-choice(body) = (correct: true, body: body)
 #let as-item(c) = if type(c) == dictionary { c } else { (correct: false, body: c) }
 
-// \begin{checkboxes} — one choice per line.
-#let checkboxes(..items) = at-level(context {
+// \begin{checkboxes} — one choice per line, square boxes.
+#let checkboxes(shape: "square", ..items) = at-level(context {
   let sol = solutions-state.get()
   block(width: 100%, above: 0.5em, below: 0.5em, inset: (left: 2em),
-    stack(spacing: 0.55em, ..items.pos().map(as-item).map(c =>
-      grid(columns: (1.4em, 1fr),
-        checkbox(checked: sol and c.correct),
+    stack(spacing: 0.7em, ..items.pos().map(as-item).map(c =>
+      grid(columns: (1.4em, 1fr), align: horizon,
+        checkbox(checked: sol and c.correct, shape: shape),
         if sol and c.correct { strong(c.body) } else { c.body }))))
 })
 
-// \begin{oneparcheckboxes} — choices inline, in the running paragraph.
-#let inline-checkboxes(..items) = context {
+// \begin{oneparcheckboxes} — choices inline, in the running paragraph, round boxes.
+#let inline-checkboxes(shape: "circle", ..items) = context {
   let sol = solutions-state.get()
   // oneparcheckboxes: \hspace before the first choice, \quad-ish between choices.
   h(1em)
   items.pos().map(as-item).map(c =>
-    box[#checkbox(checked: sol and c.correct)#h(0.55em)#if sol and c.correct { strong(c.body) } else { c.body }]
+    box[#checkbox(checked: sol and c.correct, shape: shape)#h(0.55em)#if sol and c.correct { strong(c.body) } else { c.body }]
   ).join(h(2em))
 }
 

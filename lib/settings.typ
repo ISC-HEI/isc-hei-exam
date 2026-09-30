@@ -51,8 +51,9 @@
 #let par-spacing = 0.55em
 #let question-above = 1.4em
 #let question-below = 0.35em
-#let part-above = 0.7em
+#let part-above = 0.85em
 #let part-below = 0.35em
+#let subpart-gap = 0.6em      // \subpart item separation (measured on exam3 p3)
 
 // ── Answer spaces ─────────────────────────────────────────────────────────────
 #let line-fill-height = 0.25in      // \linefillheight = \dottedlinefillheight
