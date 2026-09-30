@@ -42,6 +42,9 @@ HAVE_MAGICK=0; command -v magick >/dev/null && HAVE_MAGICK=1
 
 BASE="$(basename "${TYP%.typ}")"
 OUT="${4:-${TMPDIR:-/tmp}/isc-exam-compare/$BASE}"
+mkdir -p "$OUT"; OUT="$(cd "$OUT" && pwd -P)"   # absolute: we cd into the .typ's directory to compile
+REF="$(cd "$(dirname "$REF")" && pwd -P)/$(basename "$REF")"
+[ -n "$REF_SOL" ] && REF_SOL="$(cd "$(dirname "$REF_SOL")" && pwd -P)/$(basename "$REF_SOL")"
 TYP_ABS="$(cd "$(dirname "$TYP")" && pwd -P)/$(basename "$TYP")"
 ROOT_ARGS=(); [ -n "${ROOT:-}" ] && ROOT_ARGS=(--root "$ROOT")
 
