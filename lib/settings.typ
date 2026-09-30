@@ -66,8 +66,8 @@
 #let listing-frame = luma(64)          // mdframed middlelinecolor=black!75  (sampled: #404040)
 #let listing-numbers = rgb("#B3B2B3")  // \definecolor{listing-numbers}{HTML}{B3B2B3}
 #let listing-radius = 4pt              // roundcorner=4
-#let listing-above = 9pt               // skipabove=9pt
-#let listing-below = 0pt               // skipbelow=0pt
+#let listing-above = 11.5pt            // skipabove=9pt + the paragraph skip (measured: 12pt text→frame)
+#let listing-below = 9pt               // skipbelow=0pt, but the frame's outer margin (measured: 15pt frame→text)
 #let listing-scale = 0.85              // \usepackage[scaled=0.85]{beramono}
 #let listing-numbersep = 15pt          // numbersep=15pt
 #let listing-numbers-size = 7pt        // numberstyle=\scriptsize

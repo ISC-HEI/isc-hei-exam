@@ -5,7 +5,7 @@
 
 // A drawn square box (font independent): \checkboxchar{$\Box$}, filled when
 // checked (\checkedchar{$\blacksquare$}).
-#let checkbox(checked: false, size: 0.72em) = box(
+#let checkbox(checked: false, size: 0.8em) = box(
   width: size, height: size, stroke: 0.5pt + black, baseline: 0.05em,
   fill: if checked { black } else { none },
 )
@@ -29,9 +29,11 @@
 // \begin{oneparcheckboxes} — choices inline, in the running paragraph.
 #let inline-checkboxes(..items) = context {
   let sol = solutions-state.get()
+  // oneparcheckboxes: \hspace before the first choice, \quad-ish between choices.
+  h(1em)
   items.pos().map(as-item).map(c =>
-    box[#checkbox(checked: sol and c.correct)#h(0.45em)#if sol and c.correct { strong(c.body) } else { c.body }]
-  ).join(h(1.5em))
+    box[#checkbox(checked: sol and c.correct)#h(0.55em)#if sol and c.correct { strong(c.body) } else { c.body }]
+  ).join(h(2em))
 }
 
 // \dash: the hairline dashed rule between true/false rows (\hdashrule 0.25pt).

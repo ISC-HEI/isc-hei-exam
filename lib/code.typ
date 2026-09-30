@@ -60,7 +60,7 @@
     }
     if st.frame {
       block(width: 100%, fill: listing-back, stroke: 0.5pt + listing-frame, radius: listing-radius,
-        inset: (x: 8pt, top: 5pt, bottom: 5pt), above: listing-above, below: 0.6em, breakable: true, content)
+        inset: (x: 8pt, top: 6pt, bottom: 8pt), above: listing-above, below: listing-below, breakable: true, content)
     } else {
       block(width: 100%, above: 0.6em, below: 0.6em, breakable: true, content)
     }
