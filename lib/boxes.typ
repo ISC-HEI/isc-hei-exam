@@ -48,9 +48,10 @@
 #let last-page() = context {
   v(1fr)
   hrule()
-  v(1mm)
+  // options.tex: 1mm above, 2mm below; shifted so the text ink is centred between the rules (measured).
+  v(1mm + 1.45pt)
   align(center, text(size: size-Large, emph(ui("the-end"))))
-  v(2mm)
+  v(2mm - 1.45pt)
   hrule()
   v(1fr)
 }

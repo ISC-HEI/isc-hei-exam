@@ -156,7 +156,7 @@ The exam.cls names are kept as aliases; both columns compile.
 | `\part[3] \subsection*{T}` | `part(3, title: [T])[...]` (or `== T` in the body) |
 | `\remarkbox{...}`, `\titlebox{...}` | `remark-box[...]`, `title-box[...]` |
 | `\leerseite`, `\lastPage` | `leerseite()`, `last-page()` |
-| `\turnWarning`, `\turnpage`, `\lineSep` | `turn-warning()`, `turn-page()`, `line-sep()` |
+| `\turnWarning`, `\turnpage`, `\lineSep` | `turn-warning()`, `turn-page()`, `line-sep()` or `divider()` |
 | `\newpage` | `#pagebreak()`, anywhere |
 | `\todo{}`, `\colored{}`, `\bigO{}`, `\vspc`, `\warning` | `todo[]`, `colored[]`, `big-o()`, `visible-space()`, `warning-sign()` |
 | `\section{T}` (series) | `section[T]` |
@@ -180,7 +180,7 @@ Only Typst is needed to write exams. The rest serves the development and the com
 
 | Tool | Required for | Linux (Debian/Ubuntu) | macOS (Homebrew) |
 | --- | --- | --- | --- |
-| **typst** ≥ 0.14 | compiling | [GitHub release](https://github.com/typst/typst/releases) | `brew install typst` |
+| **typst** ≥ 0.15 | compiling | [GitHub release](https://github.com/typst/typst/releases) | `brew install typst` |
 | **Source Sans 3** | the body font | `apt install fonts-adobe-sourcesans3` | [Google Fonts](https://fonts.google.com/specimen/Source+Sans+3) |
 | **just** | the development recipes | `apt install just` | `brew install just` |
 | **poppler-utils** | tests, `compare-exam.sh` | `apt install poppler-utils` | `brew install poppler` |

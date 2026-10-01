@@ -16,6 +16,7 @@ First release: a Typst port of the ISC LaTeX exam template (Philip Hirschhorn's 
 - **Answer spaces**: `solution`, `solution-or-dotted-lines`, `solution-or-lines`, `solution-or-box`, `fill-with-dotted-lines`, `fill-with-lines`, `answer-line`, with `1fr` for LaTeX's `\fill`.
 - **Choices**: `checkboxes`, `inline-checkboxes`, `correct-choice`, `true-false` rows with their hairline separators.
 - **Listings**: framed, numbered code blocks in the `listings` + `mdframed` look, the `options.tex` colour palette as a `.tmTheme`, `small-listing`, `verbatim`, `visible-spaces`, `doclisting`, `real-verb`.
+- Requires Typst 0.15: `logo:` and `footer-logo:` accept a `path(...)`, and `#divider()` draws the `\lineSep` rule.
 - **Helpers**: `title-box`, `remark-box`, `leerseite`, `last-page`, `turn-page`, `turn-warning`, `new-page`, `line-sep`, `todo`, `colored`, `big-o`, `visible-space`, `warning-sign`.
 - **Student and solution output from one source**: `typst compile --input solutions=true`, or `solutions: true`.
 - UI strings in French (reproducing the LaTeX template's mix), English and German; `extra-i18n` overrides.

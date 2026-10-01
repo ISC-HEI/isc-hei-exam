@@ -7,7 +7,7 @@ The workflow is driven by [`just`](https://github.com/casey/just) and mirrors th
 
 | Tool | Needed for |
 |---|---|
-| `typst` ≥ 0.14 | everything |
+| `typst` ≥ 0.15 | everything |
 | `just` | the recipes below |
 | `poppler` (`pdfinfo`, `pdftoppm`, `pdftotext`) | tests and `tools/compare-exam.sh` |
 | ImageMagick 7 (`magick`) | the side-by-side comparison PNGs |

@@ -13,6 +13,7 @@
 #import "code.typ": listing-rules
 #import "headers.typ": *
 #import "cover.typ": exam-cover
+#import "boxes.typ": line-sep
 #import "questions.typ": structure
 
 #let isc-exam(
@@ -29,10 +30,10 @@
   region: "CH",
   ui-lang: auto,                // language of the UI strings; auto = lang
   extra-i18n: none,             // (fr: (key: "value")) overrides
-  logo: auto,                   // cover logo: auto = the ISC inline logo, none, or content
+  logo: auto,                   // cover logo: auto = the ISC inline logo, none, content, or a path(...)
   logo-width: 7.5cm,
   logo-pos: (x: 1.4cm, y: 9mm), // from the top-right page corner
-  footer-logo: auto,            // running-footer logo: auto = HES-SO Valais/Wallis, none, or content
+  footer-logo: auto,            // running-footer logo: auto = HES-SO Valais/Wallis, none, content, or a path(...)
   font: none,                   // body font override
   check-fonts: true,            // false: render even when the body font is missing
   confidential: false,          // true or a string: diagonal watermark
@@ -54,8 +55,10 @@
   let sol = resolve-solutions(solutions)
   let ui-lang = if ui-lang == auto { lang } else { ui-lang }
   let fnt = if font == none { body-font } else { font }
-  let logo = if logo == auto { image("../assets/isc_logo.svg") } else { logo }
-  let footer-logo = if footer-logo == auto { image("../assets/hesso_valais.svg") } else { footer-logo }
+  // Typst 0.15: a `path("figs/logo.svg")` value resolves relative to the caller's file.
+  let as-image(v, default) = if v == auto { image(default) } else if type(v) == path { image(v) } else { v }
+  let logo = as-image(logo, "../assets/isc_logo.svg")
+  let footer-logo = as-image(footer-logo, "../assets/hesso_valais.svg")
   let all = if answer-line-length == auto {
     if is-exam { answer-line-length-exam }
     else if sol { answer-line-length-series-sol } else { answer-line-length-series }
@@ -73,6 +76,7 @@
   show list: set block(above: 0.9em, below: 0.9em)   // \topsep
   show enum: set block(above: 0.9em, below: 0.9em)
   show link: set text(fill: url-color)
+  show divider: it => line-sep()   // #divider() (Typst 0.15) draws the \lineSep rule
   set heading(numbering: none, outlined: false)
 
   // ── Page ──────────────────────────────────────────────────────────────────

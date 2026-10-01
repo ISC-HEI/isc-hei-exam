@@ -1,7 +1,7 @@
 [package]
 name = "isc-hei-exam"
 version = "0.1.0"
-compiler = "0.14.0"
+compiler = "0.15.0"
 entrypoint = "lib.typ"
 repository = "https://github.com/ISC-HEI/isc-hei-exam"
 authors = ["Pierre-André Mudry"]
