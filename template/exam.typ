@@ -18,16 +18,15 @@
 #show: isc-exam.with(
   title: [Test intermédiaire],
   course: [101.1 -- Programmation impérative],
-  date: [27.10.2022],
-  month: [Octobre 2022],
+  date: [27.10.2026],
+  month: [Octobre 2026],
   teachers: [Dr P.-A. Mudry],
   revision: [Rev 1.04$omega$],
   lang: "fr",
-  expected-total: 50,   // a red note appears on the cover if the points do not add up
   logo-width: 8.5cm,
   logo-pos: (x: 1.2cm, y: 5mm),
   cover-top-space: 1.5cm,
-  name-fields: (labels: ([Nom :], [Prénom :]), x: 21mm, y: 10.7mm, gap: 8mm, width: 8cm, size: 12pt),
+  name-fields: (labels: ([Nom :], [Prénom :]), x: 21mm, y: 10.7mm, gap: 8mm, width: 8cm, size: 11pt),
   instructions: [
     #text(size: 12pt)[*Consigne : *]
     #v(0.35em)
@@ -135,6 +134,7 @@ Que vont afficher *exactement* les boucles suivantes sur la console ?
       println(bar + foo + 1)
   } while (foo + 1 < bar)
   ```,
+
   ```
   10
   9
@@ -154,6 +154,7 @@ Que vont afficher *exactement* les boucles suivantes sur la console ?
       j -= 1
   }
   ```,
+
   ```
   0 6 * 1 5 * 2 4 *
   ```,

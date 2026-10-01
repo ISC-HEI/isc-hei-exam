@@ -39,6 +39,30 @@
 #let num-points() = sum-points(points-records().filter(r => not r.bonus))
 #let num-bonus-points() = sum-points(points-records().filter(r => r.bonus))
 
+// Barème consistency: a question carries its points either on the question
+// itself or on its parts / subparts, never both; the same holds for a part and
+// its subparts. Returns the labels of the offending items (inside `context`).
+#let points-conflicts() = {
+  let rs = points-records()
+  let out = ()
+  for q in rs.filter(r => r.kind == "question") {
+    let inner = rs.filter(r => r.qid == q.qid and r.kind != "question")
+    let qlabel = [#ui("question") #q.number]
+    if q.points != none and inner.any(r => r.points != none) { out.push(qlabel) }
+    let part-i = 0
+    let part-has-points = false
+    let flagged = false
+    for r in inner {
+      if r.kind == "part" { part-i += 1; part-has-points = r.points != none; flagged = false }
+      else if r.points != none and part-has-points and not flagged {
+        out.push([#qlabel #numbering(cfg("part-numbering", default: "(a)"), part-i)])
+        flagged = true
+      }
+    }
+  }
+  out
+}
+
 // The rows of the grade table: one per numbered question.
 #let grade-rows() = {
   let rs = points-records()

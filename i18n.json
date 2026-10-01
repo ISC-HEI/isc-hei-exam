@@ -30,7 +30,7 @@
     "revision": "Rev.",
     "part": "Part",
     "solution-label": "Solution :",
-    "total-mismatch": "Barème : $t points dans le document, $e attendus",
+    "points-conflict": "Barème : points donnés à la fois à l'énoncé et à ses sous-parties :",
     "stray-markers": "$n marqueur(s) #question / #part / #subpart sans corps placés dans un conteneur : non pris en compte"
   },
   "en": {
@@ -63,7 +63,7 @@
     "revision": "Rev.",
     "part": "Part",
     "solution-label": "Solution:",
-    "total-mismatch": "Points: $t in the document, $e expected",
+    "points-conflict": "Points given both to the item and to its sub-items:",
     "stray-markers": "$n body-less #question / #part / #subpart marker(s) inside a container: ignored"
   },
   "de": {
@@ -96,7 +96,7 @@
     "revision": "Rev.",
     "part": "Teil",
     "solution-label": "Lösung:",
-    "total-mismatch": "Punkte: $t im Dokument, $e erwartet",
+    "points-conflict": "Punkte sowohl auf der Aufgabe als auch auf ihren Teilen:",
     "stray-markers": "$n #question / #part / #subpart Marker ohne Rumpf in einem Container: ignoriert"
   }
 }

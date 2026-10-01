@@ -80,12 +80,12 @@
           v(2mm)
           text(size: size-small, weight: "bold", fill: rgb("#D41367"), ui("stray-markers", params: (n: stray)))
         }
-        // Barème check: shown only when the sum of the points differs from expected-total.
-        let expected = cfg("expected-total")
-        if expected != none and points.num-points() != expected {
+        // Barème check: points on an item and on its sub-items at the same time.
+        let conflicts = points.points-conflicts()
+        if conflicts.len() > 0 {
           v(2mm)
           text(size: size-small, weight: "bold", fill: rgb("#D41367"),
-            ui("total-mismatch", params: (t: points.fmt-points(points.num-points()), e: points.fmt-points(expected))))
+            [#ui("points-conflict") #conflicts.join([, ])])
         }
       })
       v(3.5mm)

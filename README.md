@@ -60,7 +60,6 @@ The body font is **Source Sans 3** (the LaTeX template used its predecessor Sour
   course: [101.1 -- Programmation impérative],
   date: [29.1.2026], month: [Janvier 2026],
   teachers: [Dr P.-A. Mudry], revision: [Rev 1.0],
-  expected-total: 6,
   instructions: [*Consigne :* Lisez attentivement la donnée …],
 )
 
@@ -123,7 +122,7 @@ The whole vocabulary fits in a few lines:
 | `part(3, title: [Partie 1])[…]` | a bold title on the first line of the part (`\subsection*` in the LaTeX exams) |
 | `last-page()`, `leerseite()`, `turn-page()`, `new-page()` | "The end", a blank page, "Turn page →", a page break inside a part |
 
-`isc-exam(expected-total: 45)` prints a red note on the cover when the points in the document do not add up to the announced total, and another one if a marker ended up inside a container (a `#part(3)` written inside brackets), where the library cannot see it.
+The cover prints a red note when the barème is inconsistent (points given both to a question and to its parts, or to a part and to its subparts), and another one if a marker ended up inside a container (a `#part(3)` written inside brackets), where the library cannot see it.
 
 A question with an intro and no title: `question(intro: [...])`. A part with no text of its own, `#part(4)` directly followed by `#subpart`, puts `(c)` and `1)` on one line like exam.cls. `half` gives ½ points: `part(2 + half)`.
 
