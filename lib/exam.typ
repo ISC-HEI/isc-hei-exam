@@ -97,8 +97,13 @@
     text(size: if is-exam { size-Large } else { size-large }, weight: "regular", it.body))
   // Part / subpart labels are headings too (for editor outlines): render them as
   // the bare label, the title (if any) is already typeset in the body.
+  // Typst's heading show-set rules (bold, 1.2em at level 2) still apply inside a
+  // custom show rule, so the label resets them to the body weight and size.
   let structural(it) = it.supplement in ([isc-part], [isc-subpart])
-  let label-only(it) = if it.body.has("children") { it.body.children.first() } else { it.body }
+  let label-only(it) = {
+    let l = if it.body.has("children") { it.body.children.first() } else { it.body }
+    text(weight: "regular", size: if it.level == 2 { 1em / 1.2 } else { 1em }, l)
+  }
   show heading.where(level: 2): it => if structural(it) { label-only(it) } else {
     block(width: 100%, above: 1.5em, below: 0.6em, text(size: size-large, weight: "bold", it.body)) }
   show heading.where(level: 3): it => if structural(it) { label-only(it) } else {
