@@ -45,6 +45,7 @@
   page-margin: (:),             // overrides merged into the default margins, e.g. (bottom: 22mm)
   part-numbering: "(a)",
   subpart-numbering: "1)",
+  outline-depth: 3,             // PDF bookmarks and the editor outline: 1 questions, 2 + parts, 3 + subparts
   body,
 ) = {
   assert(kind in ("exam", "series"), message: "isc-hei-exam: kind must be \"exam\" or \"series\"")
@@ -94,10 +95,14 @@
   // ── Headings: level 1 = question (built by question()), level 2 = \subsection*
   show heading.where(level: 1): it => block(width: 100%, above: question-above, below: question-below,
     text(size: if is-exam { size-Large } else { size-large }, weight: "regular", it.body))
-  show heading.where(level: 2): it => block(width: 100%, above: 1.5em, below: 0.6em,
-    text(size: size-large, weight: "bold", it.body))
-  show heading.where(level: 3): it => block(width: 100%, above: 0.8em, below: 0.4em,
-    text(size: size-normal, weight: "bold", it.body))
+  // Part / subpart labels are headings too (for editor outlines): render them as
+  // the bare label, the title (if any) is already typeset in the body.
+  let structural(it) = it.supplement in ([isc-part], [isc-subpart])
+  let label-only(it) = if it.body.has("children") { it.body.children.first() } else { it.body }
+  show heading.where(level: 2): it => if structural(it) { label-only(it) } else {
+    block(width: 100%, above: 1.5em, below: 0.6em, text(size: size-large, weight: "bold", it.body)) }
+  show heading.where(level: 3): it => if structural(it) { label-only(it) } else {
+    block(width: 100%, above: 0.8em, below: 0.4em, text(size: size-normal, weight: "bold", it.body)) }
 
   // ── Listings ──────────────────────────────────────────────────────────────
   show: listing-rules
@@ -117,7 +122,7 @@
     kind: kind, lang: lang, ui-lang: ui-lang, extra-i18n: extra-i18n,
     title: title, subtitle: subtitle, course: course, date: date, month: month,
     teachers: teachers, revision: revision, footer-logo: footer-logo, expected-total: expected-total,
-    answer-line-length: all, part-numbering: part-numbering, subpart-numbering: subpart-numbering,
+    answer-line-length: all, part-numbering: part-numbering, subpart-numbering: subpart-numbering, outline-depth: outline-depth,
   ))
 
   // ── Fonts guard, then the document ────────────────────────────────────────

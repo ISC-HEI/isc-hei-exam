@@ -26,6 +26,7 @@
   Quel est le type (au sens informatique du terme) des expressions suivantes (on suppose `n` entier) ?
 ]
 
+// ───────────────────────────────────────────────────────────────────────────
 #short-answers(level: "part",
   (`3 % 4`, [Int]),
   (`(10 >> 2)  & 2`, [Int]),
@@ -45,6 +46,7 @@
   Donnez le type *ainsi que* la valeur des expressions suivantes :
 ]
 
+// ───────────────────────────────────────────────────────────────────────────
 #short-answers(level: "part",
   (`n+q`, [Long, 12]),
   (`n < p`, [Boolean, false]),
@@ -61,6 +63,7 @@
   Quelle est la valeur de `x` _après_ l'exécution des instructions suivantes ?
 ]
 
+// ───────────────────────────────────────────────────────────────────────────
 #short-answers(level: "part",
   (`var x: Int = if (30 > -30) 10 % 3 else 10 % 5`, [1]),
   (`var x: Double = 0.1; x *= 45.3`, [4.53]),
@@ -96,6 +99,7 @@
   Écrivez, lorsque cela est possible, les assignations suivantes dans leur forme courte:
 ]
 
+// ───────────────────────────────────────────────────────────────────────────
 #short-answers(level: "part",
   (`x = x-1;`, [x-=1]),
   (`x = x+1;`, [x+=1]),
@@ -111,9 +115,16 @@
   Les parenthèses sont là surtout pour nous faciliter la lecture. Un compilateur n'a pas besoin de parenthèses. Ajoutez des parenthèses aux expressions suivantes selon la priorité des opérateurs appliquée par le compilateur.
 ]
 
+// ───────────────────────────────────────────────────────────────────────────
 #part[`+ a < ~ a`]
+
+// ───────────────────────────────────────────────────────────────────────────
 #part[`-30 - 20 / 2 * 10`]
+
+// ───────────────────────────────────────────────────────────────────────────
 #part[`-x != y + 3 * 2`]
+
+// ───────────────────────────────────────────────────────────────────────────
 #part[`a / b * c / d`]
 
 #solution[
@@ -136,6 +147,7 @@
   ```
 ]
 
+// ───────────────────────────────────────────────────────────────────────────
 #part
 A l'aide des opérateurs vus au cours, faites en sorte d'afficher sur la console le contenu de la variable `foo` sur la console comme suit :
 
@@ -143,6 +155,7 @@ A l'aide des opérateurs vus au cours, faites en sorte d'afficher sur la console
 The value in hex is 0xface
 ```
 
+// ───────────────────────────────────────────────────────────────────────────
 #part
 ~ [#h(0.15em)*Optionnel* ] Un peu plus difficile. Sans vous servir de votre ordinateur, écrivez le code pour faire en sorte d'afficher la valeur binaire comme suit. #warning-sign() Attention aux espaces~#warning-sign() :
 
@@ -174,6 +187,7 @@ In binary it's 0b1111 1010 1100 1110
   Quel est le type des expressions suivantes ?
 ]
 
+// ───────────────────────────────────────────────────────────────────────────
 #short-answers(
   (`a+b`, [Int]),
   (`(d + b).toShort`, [Short]),

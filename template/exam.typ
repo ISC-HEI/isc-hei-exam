@@ -24,8 +24,6 @@
   revision: [Rev 1.04$omega$],
   lang: "fr",
   expected-total: 50,   // a red note appears on the cover if the points do not add up
-  // Cover: the sample exam puts the name fields in the LaTeX header and a
-  // wider logo; the defaults reproduce the more recent CS101 exams.
   logo-width: 8.5cm,
   logo-pos: (x: 1.2cm, y: 5mm),
   cover-top-space: 1.5cm,
@@ -43,6 +41,7 @@
 #question[Short questions]
 Cette question est séparée en plusieurs exercices indépendants. Le nombre de point pour chaque exercice est indiqué dans la marge.
 
+// ───────────────────────────────────────────────────────────────────────────
 #part(4)
 Soient les déclarations suivantes:
 
@@ -54,6 +53,7 @@ val baz : String = "y"
 
 Les expressions suivantes sont correctes. Donnez le *type* et la *valeur* des expressions suivantes.
 
+// ───────────────────────────────────────────────────────────────────────────
 #short-answers(
   (`(foobar + - foobar).toByte`, [Byte, 0]),
   (`(foo & 0xFF0).toHexString`, [String, "ab0"]),
@@ -65,6 +65,7 @@ Les expressions suivantes sont correctes. Donnez le *type* et la *valeur* des ex
   (`baz + ('d' + 1.9).toChar + ('t'-1).toChar`, [String, "yes"]),
 )
 
+// ───────────────────────────────────────────────────────────────────────────
 #part(1)
 Quel est le contenu de `r` après l'exécution du code ci-dessous :
 
@@ -76,6 +77,7 @@ val r: String = StringUtils.charAt(s, StringUtils.length(s)-2) +
 
 #answer(1cm)[`"ok"`]
 
+// ───────────────────────────────────────────────────────────────────────────
 #part(1)
 Soit le code suivant :
 
@@ -87,6 +89,7 @@ val b : Boolean = a || !a
 Quelle est la valeur de `b` ?
 #choices(inline: true, [Elle dépend du contenu de `a`], correct[`true`], [`false`])
 
+// ───────────────────────────────────────────────────────────────────────────
 #bonus-part(2)
 Écrivez le code (sans fonction) permettant d'écrire tous les multiples de 79 plus grands que 1 et plus petits que 1000 sur la console.
 
@@ -99,6 +102,7 @@ Quelle est la valeur de `b` ?
 
 #pagebreak()
 
+// ───────────────────────────────────────────────────────────────────────────
 #part(4)
 Vrai ou faux ?
 #v(2.3em)
@@ -118,6 +122,7 @@ Vrai ou faux ?
 #question(points: 8)[Loops analysis]
 Que vont afficher *exactement* les boucles suivantes sur la console ?
 
+// ───────────────────────────────────────────────────────────────────────────
 #part[#code-answer(
   ```scala
   var foo: Int = 3
@@ -138,6 +143,7 @@ Que vont afficher *exactement* les boucles suivantes sur la console ?
   gap: 7mm,
 )]
 
+// ───────────────────────────────────────────────────────────────────────────
 #part[#code-answer(
   ```scala
   var j = 6
@@ -154,6 +160,7 @@ Que vont afficher *exactement* les boucles suivantes sur la console ?
   gap: 7mm,
 )]
 
+// ───────────────────────────────────────────────────────────────────────────
 #part[#code-answer(
   ```scala
   var a: Int = 0xf0
@@ -170,6 +177,7 @@ Que vont afficher *exactement* les boucles suivantes sur la console ?
   gap: 7mm,
 )]
 
+// ───────────────────────────────────────────────────────────────────────────
 #part[#code-answer(
   ```scala
   // println(5)
@@ -186,6 +194,7 @@ Que vont afficher *exactement* les boucles suivantes sur la console ?
 // ═══════════════════════════════════════════════════════════════════════════
 #question[EBNF grammars]
 
+// ───────────────────────────────────────────────────────────────────────────
 #part
 Soit la grammaire suivante pour `exp`
 
@@ -196,19 +205,23 @@ op ::= '+' | '-'
 exp ::= (factor op exp) | factor
 ```
 
+// ───────────────────────────────────────────────────────────────────────────
 #subpart(1)
 Donnez une production valide la plus courte possible pour `exp`.
 #answer(1cm)[x ou alors y ou alors z]
 
+// ───────────────────────────────────────────────────────────────────────────
 #subpart(1)
 Donnez une production utilisant chacune des règles de la grammaire.
 #answer(1cm)[`x + (z-y)`]
 
+// ───────────────────────────────────────────────────────────────────────────
 #subpart(1)
 Donnez une production de `exp` utilisant au moins deux fois la règle `parexpr`.
 
 #answer(1cm)[`((x + x) - (y + z))`]
 
+// ───────────────────────────────────────────────────────────────────────────
 #part(3)
 Écrivez la description EBNF de la grammaire _even-integer_ qui reconnaît uniquement les entiers pairs. Par exemple, dans cette grammaire -6 et 34 sont valides alors que 3 et -23 ne le sont pas. On considère également que 0 et -0 sont valides.
 
@@ -225,7 +238,9 @@ Donnez une production de `exp` utilisant au moins deux fois la règle `parexpr`.
 
 // ═══════════════════════════════════════════════════════════════════════════
 #question[Code comprehension]
+
 Analysez la fonction suivante puis répondez aux questions ci-dessous.
+
 ```scala
 def isL(x: Char): Boolean = {
     if (x >= 'a' && x <= 'z') true else false
@@ -252,6 +267,7 @@ def bar(word: String): Int = {
 }
 ```
 
+// ───────────────────────────────────────────────────────────────────────────
 #part(2)
 Expliquez avec des phrases à quoi sert la fonction `bar` ci-dessus.
 
@@ -259,6 +275,7 @@ Expliquez avec des phrases à quoi sert la fonction `bar` ci-dessus.
   La fonction sert à trouver la position du premier caractère de la chaîne qui n'est pas une lettre minuscule ou majuscule, par exemple un chiffre ou un espace par exemple. Si la chaîne est composée uniquement de lettres ou elle est vide, la fonction retourne -1.
 ]
 
+// ───────────────────────────────────────────────────────────────────────────
 #part(1)
 Donnez *deux exemples* complets d'utilisation de `bar` permettant de démontrer votre explication.
 
@@ -269,6 +286,7 @@ Donnez *deux exemples* complets d'utilisation de `bar` permettant de démontrer 
 // ═══════════════════════════════════════════════════════════════════════════
 #question[Writing functions]
 
+// ───────────────────────────────────────────────────────────────────────────
 #part(2)
 Écrivez une fonction nommée `foo` qui prend un `Double` nommé $x$ en argument et qui retourne la valeur
 $ italic("foo")(x) = (3x^2 + italic("sin")(x) - 3) / x^3 $
@@ -281,6 +299,7 @@ $ italic("foo")(x) = (3x^2 + italic("sin")(x) - 3) / x^3 $
   ```
 ]
 
+// ───────────────────────────────────────────────────────────────────────────
 #part(2)
 Écrivez une fonction retournant, à partir d'un nombre de jours entiers, le nombre correspondant de secondes.
 
@@ -292,8 +311,10 @@ $ italic("foo")(x) = (3x^2 + italic("sin")(x) - 3) / x^3 $
   ```
 ]
 
+// ───────────────────────────────────────────────────────────────────────────
 #part()
 
+// ───────────────────────────────────────────────────────────────────────────
 #subpart(3)
 Écrivez une fonction nommée `factorFinder` qui affiche sur la console tous les diviseurs entiers (sans lui-même ni 1) d'un nombre entier passé en argument.
 
@@ -328,6 +349,7 @@ factorFinder(541) -> affiche "The whole dividers of 541 are : 541 is prime !"
   ```
 ]
 
+// ───────────────────────────────────────────────────────────────────────────
 #bonus-subpart(1)
 Dans le code ci-dessus, on constate que le string affiché contient un espace à la fin. Comment pouvez-vous faire pour effacer ce caractère dans la console s'il a déjà été généré ?
 
@@ -346,6 +368,7 @@ def length(s: String) : Int
 def charAt(s: String, pos: Int)
 ```
 
+// ───────────────────────────────────────────────────────────────────────────
 #part(3, title: [Progressive strings])
 #figure(
   image("figs/ascii.svg", width: 147mm),   // 0.85\textwidth
@@ -380,6 +403,7 @@ progressive("cZ") // Returns false
 
 #pagebreak()
 
+// ───────────────────────────────────────────────────────────────────────────
 #part(4, title: [Double vowels])
 
 Écrivez la fonction `doubleVowels` qui reçoit un `String` en argument et retourne un `String`. Le `string` retourné correspond au `String` reçu mais avec toutes les voyelles qui ont été doublées. Pour cet exercice les voyelles sont : `a`, `e`, `i`, `o`, `u`, `y`.
@@ -421,6 +445,7 @@ doubleVowels("aabb") // Returns "aaaabb"
   ```
 ]
 
+// ───────────────────────────────────────────────────────────────────────────
 #part(4, title: [No triples])
 Le clavier de votre ordinateur est défectueux: quand vous tapez 2x de suite la même touche, il écrit 3x de suite le même caractère !
 
@@ -512,4 +537,5 @@ Pour le dernier point, le montant de l'amende est calculé comme suit :
 ]
 
 #pagebreak()
+
 #last-page()

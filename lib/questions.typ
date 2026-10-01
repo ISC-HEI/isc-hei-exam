@@ -176,6 +176,15 @@
 // heading as the first line of the body.
 #let with-title(title, body) = if title == none { body } else { [== #title] + (if body == none { [] } else { body }) }
 
+// The part / subpart label is a real heading (level 2 / 3). Headings are what
+// Tinymist's preview outline in VS Code and the PDF bookmarks are built from,
+// so the exam structure shows up there under each question, down to
+// `outline-depth` (isc-exam parameter, default 3; 1 keeps questions only).
+// isc-exam() renders headings carrying these supplements as the bare label.
+#let outline-label(level, kind, label, title) = heading(level: level, numbering: none, outlined: false,
+  bookmarked: level <= cfg("outline-depth", default: 3), supplement: [#kind],
+  if title == none { label } else { [#label #title] })
+
 #let inline-points(points, bonus) = if points == none { none } else {
   context [(#fmt-points(points) #ui(if bonus { "points-bonus" } else { "points" })) ]
 }
@@ -193,7 +202,7 @@
   context {
     let exam = cfg("kind") == "exam"
     labelled-row(question-indent, part-label-width,
-      if continuation { none } else { numbering(cfg("part-numbering", default: "(a)"), part-counter.get().first()) }, inner,
+      if continuation { none } else { outline-label(2, "isc-part", numbering(cfg("part-numbering", default: "(a)"), part-counter.get().first()), title) }, inner,
       margin: if points != none and exam and not continuation { margin-points(points, bonus, depth: 0) },
       inline-points: if not exam and not continuation { inline-points(points, bonus) })
   }
@@ -224,7 +233,7 @@
     let exam = cfg("kind") == "exam"
     let in-part = part-counter.get().first() > 0
     labelled-row(subpart-base(), subpart-label-width,
-      if continuation { none } else { numbering(cfg("subpart-numbering", default: "1)"), subpart-counter.get().first()) }, inner,
+      if continuation { none } else { outline-label(3, "isc-subpart", numbering(cfg("subpart-numbering", default: "1)"), subpart-counter.get().first()), title) }, inner,
       above: subpart-gap, below: subpart-gap,
       margin: if points != none and exam and not continuation { margin-points(points, bonus, depth: if in-part { 1 } else { 0 }) },
       inline-points: if not exam and not continuation { inline-points(points, bonus) })

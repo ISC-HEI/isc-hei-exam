@@ -64,9 +64,11 @@ The body font is **Source Sans 3** (the LaTeX template used its predecessor Sour
   instructions: [*Consigne :* Lisez attentivement la donnée …],
 )
 
+// ═══════════════════════════════════════════════════════════════════════════
 #question[Short questions]
 Cette question est séparée en plusieurs exercices indépendants.
 
+// ───────────────────────────────────────────────────────────────────────────
 #part(3)
 Qu'affiche le code suivant ?
 ```scala
@@ -74,9 +76,11 @@ println((1 to 3).sum)
 ```
 #answer(2cm)[`6`]
 
+// ───────────────────────────────────────────────────────────────────────────
 #part(1)
 Que vaut `true || !true` ? #choices(inline: true, correct[`true`], [`false`], [ça dépend])
 
+// ───────────────────────────────────────────────────────────────────────────
 #part(2)
 _Vrai ou faux ?_
 #true-false(
@@ -86,7 +90,10 @@ _Vrai ou faux ?_
 
 #pagebreak()
 
+// ═══════════════════════════════════════════════════════════════════════════
 #question[Récursivité]
+
+// ───────────────────────────────────────────────────────────────────────────
 #part(4)
 Écrivez la fonction `fact`.
 #answer(1fr)[```scala def fact(n: Int): Int = if (n <= 1) 1 else n * fact(n - 1)```]
@@ -94,7 +101,9 @@ _Vrai ou faux ?_
 #last-page()
 ````
 
-As in exam.cls, `#question[…]`, `#part(3)` and `#subpart` are **markers**: what follows belongs to them, up to the next marker. There is nothing to close, and `#pagebreak()` works anywhere, the item simply continues on the next page. `#end-parts()` returns to the question level (`\end{parts}`), which is rarely needed. The bracketed form `#part(3)[…]` is still accepted when a body must be explicit.
+As in exam.cls, `#question[…]`, `#part(3)` and `#subpart` are **markers**: what follows belongs to them, up to the next marker. There is nothing to close, and `#pagebreak()` works anywhere, the item simply continues on the next page. `#end-parts()` returns to the question level (`\end{parts}`), which is rarely needed. The bracketed form `#part(3)[…]` is still accepted when a body must be explicit. The comment rules (`// ═══` before a question, `// ───` before a part) are only a reading aid, the templates use them throughout.
+
+Questions, parts and subparts are headings, so the structure of the exam appears in the PDF bookmarks and in the Tinymist **Outline** view of the Typst preview in VS Code (`outline-depth: 3` by default; `1` keeps the questions only). VS Code's own Outline panel lists source symbols (`=` headings, `#let`, labels) and does not see function calls.
 
 The whole vocabulary fits in a few lines:
 
