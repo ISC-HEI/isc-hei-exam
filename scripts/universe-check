@@ -3,6 +3,7 @@
 # (github.com/typst/package-check). Fails only on errors; warnings are printed.
 . "$(dirname "${BASH_SOURCE[0]}")/universe-common"
 
+export PATH="$HOME/.cargo/bin:$PATH"   # cargo-installed tools, for shells without it on PATH
 command -v typst-package-check >/dev/null || {
   echo "typst-package-check not found — install it: cargo install --locked --git https://github.com/typst/package-check" >&2
   exit 1
