@@ -45,21 +45,24 @@
   // \vspace*{top-space} then the ruled title block.
   v(exam-first-page-extra-top + top-space)
   hrule()
-  v(1.4em)   // rule → title baseline 11.6mm (measured)
+  v(0.66em)  // rule → title cap top 14.5pt (measured on exam-sample p1)
   align(center, {
-    set par(leading: 0.55em)
+    set par(leading: 0.85em)   // title ink → subtitle ink 8.8pt (measured)
     text(size: size-huge, smallcaps(cfg("title")))
     if solutions-state.get() {
       linebreak()
       text(size: size-Large, ui("solution-caps"))
       linebreak()
-      text(size: size-large, style: "italic", cfg("course"))
+      // LaTeX's baselineskip after the 14.4pt SOLUTION line is 2.2pt tighter (measured)
+      box(move(dy: -2.2pt, text(size: size-large, style: "italic", cfg("course"))))
     } else {
       linebreak()
       text(size: size-Large, style: "italic", cfg("course"))
     }
   })
-  v(0.35em)   // title baseline → rule 8.4mm (measured)
+  // subtitle ink → rule 13.4pt (measured); the block is centred between the rules.
+  // The solution cover has one line more and its last line box is 3pt taller than LaTeX's.
+  v(if solutions-state.get() { 0.79em - 3pt } else { 0.79em })
   hrule()
   v(2.5cm + 1.8mm)   // \vspace{2.5cm} + the center env's skips (measured: rule → box 28.7mm)
 

@@ -20,7 +20,8 @@
 
 #let footer-logo() = context {
   let l = cfg("footer-logo")
-  if l == none { none } else { box(width: 2.2cm, l) }
+  // LaTeX centres the logo 2pt higher than the "Page n/N" text (measured on p2/p3).
+  if l == none { none } else { box(width: 2.2cm, move(dy: -2.1pt, l)) }
 }
 
 #let exam-header = context {
@@ -28,7 +29,7 @@
   if p > 1 {
     set text(size: size-small)
     if calc.even(p) { align(left, cfg("date")) } else { align(right, smallcaps(cfg("title"))) }
-    v(-0.2em)   // \runningheadrule sits 1mm under the header baseline (measured)
+    v(-1.0pt)   // header text ink → \runningheadrule 4.1pt (measured on exam-sample p2/p3)
     rule()
   }
 }
@@ -37,7 +38,7 @@
   let p = counter(page).get().first()
   let last = counter(page).final().first()
   rule()
-  v(if p == 1 { -0.05em } else { 0.15em })   // \footrule to footer baseline: 5.2mm; p1 sits 1.4mm higher (measured)
+  v(if p == 1 { -1.7pt } else { 0.1pt })   // \footrule → footer text ink: 3.8pt on p1, 7.7pt after (measured)
   set text(size: size-small)
   let cols = (1fr, auto, 1fr)
   if p == 1 {
