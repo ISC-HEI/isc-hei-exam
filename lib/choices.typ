@@ -74,14 +74,16 @@
   else if type(v) == str { lower(v) == "true" }
   else { lower(repr(v).replace("[", "").replace("]", "")) == "true" }
 
-// \dash: the hairline dashed rule between rows (\hdashrule 0.25pt). Not indented
+// \dash: the hairline between rows (\hdashrule 0.25pt, solid). Not indented
 // by itself: the block around it is.
+// options.tex: \hdashrule[2ex]{\linewidth}{0.25pt}{} with an empty dash pattern,
+// i.e. a solid hairline.
 #let dash-rule-raw() = block(width: 100%, above: 0pt, below: 0pt,
-  line(length: 100%, stroke: (thickness: 0.25pt, dash: "densely-dashed", paint: black)))
+  line(length: 100%, stroke: 0.25pt + black))
 #let dash-rule() = at-level(dash-rule-raw())
 
 // One row: statement on the left, "True | False" with two boxes on the right,
-// the dashed rule under it.
+// the hairline under it.
 #let tf-row(statement, ans, sol) = {
   let mark(v) = if sol and ans == v { text(size: 1.15em)[$times.o$] } else { checkbox() }
   // options.tex adds \vspace{0.9mm} per row in the student version only.
@@ -96,7 +98,7 @@
 }
 
 // true-false(..items, rule: true): items are is-true[...] / is-false[...], or
-// (statement, bool) pairs. `rule: false` drops the leading dashed rule.
+// (statement, bool) pairs. `rule: false` drops the leading hairline.
 // Legacy form, one row without the leading rule: true-false[statement][true].
 #let true-false(..items, rule: true) = {
   let pos = items.pos()

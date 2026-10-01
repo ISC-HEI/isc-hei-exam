@@ -27,7 +27,7 @@ The series flavour: [`series.pdf`](https://github.com/ISC-HEI/isc-hei-exam/blob/
 - **One source, two PDFs** — `typst compile --input solutions=true` prints the solutions in framed boxes where the students get dotted lines, and nothing else moves
 - **The exam.cls look** — two-sided geometry with a binding offset, date and small-caps title alternating in the running header, HES-SO logo and page numbers swapping sides, "The end" on the last page
 - **Answer spaces** — dotted lines, ruled lines, empty boxes, answer lines, with `1fr` for LaTeX's `\fill`
-- **Choices** — square checkboxes, inline or stacked, and true/false rows with the dashed hairlines
+- **Choices** — square checkboxes, inline or stacked, and true/false rows with hairline separators
 - **Listings** — grey rounded frames with line numbers outside, the IntelliJ-like palette of the LaTeX `listings` setup, small and unframed variants
 - **Series mode** — `series.with(...)` switches to the exercise-series geometry, header and title block
 - **Trilingual UI strings** — French (reproducing the historical template, English boilerplate included), English and German, overridable per document
@@ -115,7 +115,7 @@ The whole vocabulary fits in a few lines:
 | `answer(1fr)[…]` | the rest of the page |
 | `answer-line[Int]` | a short rule at the right, the answer written on it in the solutions |
 | `choices(correct[…], […], […])`, `choices(inline: true, …)` | square boxes stacked, round boxes in the running text |
-| `true-false(is-true[…], is-false[…])` | the True / False rows with their dashed rules |
+| `true-false(is-true[…], is-false[…])` | the True / False rows with their hairline separators |
 | `solution[…]` | shown in the solutions only |
 | `short-answers((`a + b`, [Int]), (`c / b`, [Short]))` | one subpart with an answer line per pair (`level: "part"` for parts) |
 | `code-answer(```scala …```, [edb])` | code on the left, "Solution :" with a 3.5 cm answer area on the right, never split across pages |
