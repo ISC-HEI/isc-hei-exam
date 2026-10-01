@@ -26,11 +26,13 @@
   Quel est le type (au sens informatique du terme) des expressions suivantes (on suppose `n` entier) ?
 ]
 
-#part[`3 % 4` #answer-line[Int]]
-#part[`(10 >> 2)  & 2` #answer-line[Int]]
-#part[`true && (n < 5)` #answer-line[Boolean]]
-#part[`"Exercise" + "3.1f"` #answer-line[String]]
-#part[`if(n > 43) 4.0 else 2.0` #answer-line[Double]]
+#short-answers(level: "part",
+  (`3 % 4`, [Int]),
+  (`(10 >> 2)  & 2`, [Int]),
+  (`true && (n < 5)`, [Boolean]),
+  (`"Exercise" + "3.1f"`, [String]),
+  (`if(n > 43) 4.0 else 2.0`, [Double]),
+)
 
 // ═══════════════════════════════════════════════════════════════════════════
 #question[
@@ -43,12 +45,14 @@
   Donnez le type *ainsi que* la valeur des expressions suivantes :
 ]
 
-#part[`n+q` #answer-line[Long, 12]]
-#part[`n < p` #answer-line[Boolean, false]]
-#part[`n % p + q` #answer-line[Long, 4]]
-#part[`n+x` #answer-line[Float, 11.76f]]
-#part[`n >= p` #answer-line[Boolean, true]]
-#part[`n > q + 8` #answer-line[Boolean, false]]
+#short-answers(level: "part",
+  (`n+q`, [Long, 12]),
+  (`n < p`, [Boolean, false]),
+  (`n % p + q`, [Long, 4]),
+  (`n+x`, [Float, 11.76f]),
+  (`n >= p`, [Boolean, true]),
+  (`n > q + 8`, [Boolean, false]),
+)
 
 #pagebreak()
 
@@ -57,15 +61,17 @@
   Quelle est la valeur de `x` _après_ l'exécution des instructions suivantes ?
 ]
 
-#part[`var x: Int = if (30 > -30) 10 % 3 else 10 % 5` #answer-line[1]]
-#part[`var x: Double = 0.1; x *= 45.3` #answer-line[4.53]]
-#part[`var x: Int = 10; x ^= 3` #answer-line[9]]
-#part[`var x: Int = 0xc0f0; var y: Int = 0x0a0e; x |= y` #answer-line[0xcafe]]
-#part[`var x: Int = 10; x /= 3` #answer-line[3]]
-#part[`var x: String = "Hello"; var y: String = "toto"; x+=y` #answer-line["Hellototo"]]
-#part[`var x: String = "Hello" + 3 + 4` #answer-line["Hello34"]]
-#part[`var x: String = "Hello" + (3 + 4)` #answer-line["Hello7"]]
-#part[`var x: Double = 3.0; x /= 3.0` #answer-line[1.0]]
+#short-answers(level: "part",
+  (`var x: Int = if (30 > -30) 10 % 3 else 10 % 5`, [1]),
+  (`var x: Double = 0.1; x *= 45.3`, [4.53]),
+  (`var x: Int = 10; x ^= 3`, [9]),
+  (`var x: Int = 0xc0f0; var y: Int = 0x0a0e; x |= y`, [0xcafe]),
+  (`var x: Int = 10; x /= 3`, [3]),
+  (`var x: String = "Hello"; var y: String = "toto"; x+=y`, ["Hellototo"]),
+  (`var x: String = "Hello" + 3 + 4`, ["Hello34"]),
+  (`var x: String = "Hello" + (3 + 4)`, ["Hello7"]),
+  (`var x: Double = 3.0; x /= 3.0`, [1.0]),
+)
 
 // ═══════════════════════════════════════════════════════════════════════════
 #question[
@@ -90,13 +96,15 @@
   Écrivez, lorsque cela est possible, les assignations suivantes dans leur forme courte:
 ]
 
-#part[`x = x-1;` #answer-line[x-=1]]
-#part[`x = x+1;` #answer-line[x+=1]]
-#part[`x = x*4;` #answer-line[x\*=4]]
-#part[`x = x + "toto";` #answer-line[x += ''toto'']]
-#part[`x = -2;` #answer-line[x = -2, pas de forme courte]]
-#part[`x = x / 10;` #answer-line[x /= 10]]
-#part[`x = 10 / x;` #answer-line[x = 10 / x, pas de forme courte]]
+#short-answers(level: "part",
+  (`x = x-1;`, [x-=1]),
+  (`x = x+1;`, [x+=1]),
+  (`x = x*4;`, [x\*=4]),
+  (`x = x + "toto";`, [x += ''toto'']),
+  (`x = -2;`, [x = -2, pas de forme courte]),
+  (`x = x / 10;`, [x /= 10]),
+  (`x = 10 / x;`, [x = 10 / x, pas de forme courte]),
+)
 
 // ═══════════════════════════════════════════════════════════════════════════
 #question[
@@ -168,8 +176,10 @@
   Quel est le type des expressions suivantes ?
 ]
 
-#subpart[`a+b` #answer-line[Int]]
-#subpart[`(d + b).toShort` #answer-line[Short]]
-#subpart[`d * a` #answer-line[Double]]
-#subpart[`c / b` #answer-line[Int]]
-#subpart[`a+b+c+d` #answer-line[Double]]
+#short-answers(
+  (`a+b`, [Int]),
+  (`(d + b).toShort`, [Short]),
+  (`d * a`, [Double]),
+  (`c / b`, [Int]),
+  (`a+b+c+d`, [Double]),
+)

@@ -17,6 +17,7 @@
 
 #import "settings.typ": *
 #import "state.typ": *
+#import "code.typ": verbatim
 
 #let dotted-leader = box(width: 100%, repeat([.], gap: 0.3em))
 #let solid-leader = line(length: 100%, stroke: 0.4pt + black)
@@ -29,13 +30,22 @@
 }
 #let is-fill-space(c) = c.has("children") and c.children.any(x => x.func() == metadata and x.value == "isc-fill")
 
-// Split `body` into (everything before, trailing fill space or none).
+// Split `body` into (everything before, trailing fill space or none). Looks
+// through the last child too, so a fill hoisted out of a nested subpart (the
+// last child of the part body is then the subpart's output) cascades upwards.
 #let split-trailing-fill(body) = {
   if body == none or not body.has("children") { return (body, none) }
   let ch = body.children
   let i = ch.len() - 1
   while i >= 0 and (ch.at(i).func() == parbreak or repr(ch.at(i).func()) == "space") { i -= 1 }
-  if i >= 0 and is-fill-space(ch.at(i)) { (ch.slice(0, i).join(), ch.at(i)) } else { (body, none) }
+  if i < 0 { return (body, none) }
+  let last = ch.at(i)
+  if is-fill-space(last) { return (ch.slice(0, i).join(), last) }
+  if last.has("children") {
+    let (inner, trailing) = split-trailing-fill(last)
+    if trailing != none { return ((ch.slice(0, i) + (inner,)).join(), trailing) }
+  }
+  (body, none)
 }
 
 // A block of `height` filled with `leader` every \linefillheight (0.25in).
@@ -131,4 +141,20 @@
   block(width: 100%, above: 1.3em, below: 0pt,
     align(right, box[#label#h(0.3em)#box(width: w, stroke: (bottom: 0.4pt + black), inset: (bottom: 1.5pt), ans)]))
   v(0.7em)
+}
+
+// Code on the left, a labelled answer area on the right — the "what does this
+// loop print?" layout (LaTeX: two minipages, 9cm and 4cm, solution[3.5cm]).
+//
+//   #part[#code-answer(```scala var c = 'e' …```, [edb])]
+//
+// `output` may be a raw block (shown unframed, as a verbatim) or any content.
+// The row is never split across pages. `gap` is the space left under the row.
+#let code-answer(code, output, code-width: 9cm, answer-width: 4cm, height: 3.5cm, indent: 2em, gap: 0pt, label: auto) = {
+  let shown = if type(output) == content and output.func() == raw { verbatim(output) } else { output }
+  block(breakable: false, grid(columns: (indent, code-width, answer-width), column-gutter: 2em,
+    [],
+    code,
+    context [#(if label == auto { ui("solution-label") } else { label }) #answer(blank: height, shown)]))
+  if gap != 0pt { v(gap) }
 }

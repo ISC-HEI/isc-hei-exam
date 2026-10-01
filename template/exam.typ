@@ -23,6 +23,7 @@
   teachers: [Dr P.-A. Mudry],
   revision: [Rev 1.04$omega$],
   lang: "fr",
+  expected-total: 50,   // a red note appears on the cover if the points do not add up
   // Cover: the sample exam puts the name fields in the LaTeX header and a
   // wider logo; the defaults reproduce the more recent CS101 exams.
   logo-width: 8.5cm,
@@ -55,14 +56,16 @@
   Les expressions suivantes sont correctes. Donnez le *type* et la *valeur* des expressions suivantes.
 ]
 
-#subpart[`(foobar + - foobar).toByte` #answer-line[Byte, 0]]
-#subpart[`(foo & 0xFF0).toHexString` #answer-line[String, "ab0"]]
-#subpart[`(((foo >> 4) << 4) | 0xE).toHexString` #answer-line[String, "babe"]]
-#subpart[`(foo^foo).toShort` #answer-line[Short, 0]]
-#subpart[`((foobar * 100).toInt / 100.0f)` #answer-line[Float, 3.82f]]
-#subpart[`if(foo < 0xFFFF) 'a' else 'b'` #answer-line[Char, 'a']]
-#subpart[`if(true) '1' + baz else baz + '1'` #answer-line[String, "1y"]]
-#subpart[`baz + ('d' + 1.9).toChar + ('t'-1).toChar` #answer-line[String, "yes"]]
+#short-answers(
+  (`(foobar + - foobar).toByte`, [Byte, 0]),
+  (`(foo & 0xFF0).toHexString`, [String, "ab0"]),
+  (`(((foo >> 4) << 4) | 0xE).toHexString`, [String, "babe"]),
+  (`(foo^foo).toShort`, [Short, 0]),
+  (`((foobar * 100).toInt / 100.0f)`, [Float, 3.82f]),
+  (`if(foo < 0xFFFF) 'a' else 'b'`, [Char, 'a']),
+  (`if(true) '1' + baz else baz + '1'`, [String, "1y"]),
+  (`baz + ('d' + 1.9).toChar + ('t'-1).toChar`, [String, "yes"]),
+)
 
 #part(1)[
   Quel est le contenu de `r` après l'exécution du code ci-dessous :
@@ -122,16 +125,7 @@
   Que vont afficher *exactement* les boucles suivantes sur la console ?
 ]
 
-// LaTeX minipages never break across pages: keep the row together.
-#let loop-part(code, output) = part[
-  #block(breakable: false, grid(columns: (2em, 8cm, 5cm), column-gutter: 2em,
-    [],
-    code,
-    [Solution : #answer(blank: 3.5cm, output)]))
-  #v(7mm)
-]
-
-#loop-part(
+#part[#code-answer(
   ```scala
   var foo: Int = 3
   var bar: Int = 8
@@ -143,14 +137,15 @@
       println(bar + foo + 1)
   } while (foo + 1 < bar)
   ```,
-  verbatim[```
+  ```
   10
   9
   8
-  ```],
-)
+  ```,
+  gap: 7mm,
+)]
 
-#loop-part(
+#part[#code-answer(
   ```scala
   var j = 6
   var i = 0
@@ -160,12 +155,13 @@
       j -= 1
   }
   ```,
-  verbatim[```
+  ```
   0 6 * 1 5 * 2 4 *
-  ```],
-)
+  ```,
+  gap: 7mm,
+)]
 
-#loop-part(
+#part[#code-answer(
   ```scala
   var a: Int = 0xf0
   var t: String = ""
@@ -175,22 +171,24 @@
   }
   print(t)
   ```,
-  verbatim[```
+  ```
   11110000
-  ```],
-)
+  ```,
+  gap: 7mm,
+)]
 
-#loop-part(
+#part[#code-answer(
   ```scala
   // println(5)
   for (i: Int <- 3 to 7){
       print(s"${i-1*2/3} ")
   }
   ```,
-  verbatim[```
+  ```
   3 4 5 6 7
-  ```],
-)
+  ```,
+  gap: 7mm,
+)]
 
 // ═══════════════════════════════════════════════════════════════════════════
 #question[EBNF grammars]
@@ -368,8 +366,7 @@
   ```
 ]
 
-#part(3)[
-  == Progressive strings
+#part(3, title: [Progressive strings])[
   #figure(
     image("figs/ascii.svg", width: 147mm),   // 0.85\textwidth
     caption: [La table ASCII],
@@ -404,8 +401,7 @@
 
 #pagebreak()
 
-#part(4)[
-  == Double vowels
+#part(4, title: [Double vowels])[
 
   Écrivez la fonction `doubleVowels` qui reçoit un `String` en argument et retourne un `String`. Le `string` retourné correspond au `String` reçu mais avec toutes les voyelles qui ont été doublées. Pour cet exercice les voyelles sont : `a`, `e`, `i`, `o`, `u`, `y`.
 
@@ -447,8 +443,7 @@
   ]
 ]
 
-#part(4)[
-  == No triples
+#part(4, title: [No triples])[
   Le clavier de votre ordinateur est défectueux: quand vous tapez 2x de suite la même touche, il écrit 3x de suite le même caractère !
 
   Écrivez la fonction `noTriples` qui corrige cette erreur dans la chaîne passée en argument. Notez que cette fonction n'interagit pas avec la console. Exemple:

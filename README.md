@@ -109,11 +109,16 @@ The whole vocabulary fits in a few lines:
 | `choices(correct[…], […], […])`, `choices(inline: true, …)` | square boxes stacked, round boxes in the running text |
 | `true-false(is-true[…], is-false[…])` | the True / False rows with their dashed rules |
 | `solution[…]` | shown in the solutions only |
+| `short-answers((`a + b`, [Int]), (`c / b`, [Short]))` | one subpart with an answer line per pair (`level: "part"` for parts) |
+| `code-answer(```scala …```, [edb])` | code on the left, "Solution :" with a 3.5 cm answer area on the right, never split across pages |
+| `part(3, title: [Partie 1])[…]` | a bold title on the first line of the part (`\subsection*` in the LaTeX exams) |
 | `last-page()`, `leerseite()`, `turn-page()`, `new-page()` | "The end", a blank page, "Turn page →", a page break inside a part |
 
-Questions, parts and subparts are **flat, sibling calls**, exactly like `\question` / `\part` / `\subpart` in exam.cls. This is what lets a plain `#pagebreak()` between two parts work (Typst forbids page breaks inside containers). Nesting a `#subpart[...]` inside a `#part[...]` body is accepted too; use `new-page()` in that case. `half` gives ½ points: `part(2 + half)`.
+Two things that look like tricks are intended: `#part(4)` with no brackets puts `(c)` on the same line as the first subpart, as exam.cls does; and `isc-exam(expected-total: 45)` prints a red note on the cover when the points in the document do not add up to the announced total.
 
-An `answer(1fr)` written last in a part is hoisted out of the part by the library, so what follows on the same page still fits, like LaTeX's `\fill` glue. Elsewhere in a body, a `1fr` space fills the rest of the page and pushes what follows to the next one.
+A question that has an intro but no title takes it as `question(intro: [...])`. Questions, parts and subparts are **flat, sibling calls**, exactly like `\question` / `\part` / `\subpart` in exam.cls. This is what lets a plain `#pagebreak()` between two parts work (Typst forbids page breaks inside containers). Nesting a `#subpart[...]` inside a `#part[...]` body is accepted too; use `new-page()` in that case. `half` gives ½ points: `part(2 + half)`.
+
+An `answer(1fr)` written last in a part or subpart is hoisted out of its container by the library, through nested levels, so what follows on the same page still fits, like LaTeX's `\fill` glue. Elsewhere in a body, a `1fr` space fills the rest of the page and pushes what follows to the next one.
 
 ### From LaTeX to Typst
 
@@ -139,7 +144,7 @@ The exam.cls names are kept as aliases; both columns compile.
 | `\begintruefalse`, `\truefalse{s}{true}` | `true-false(is-true[s], is-false[s], ...)` (legacy `true-false[s][true]` per row still works) |
 | `\begin{scala}`, `\begin{verbatim_lst}` | ```` ```scala ```` fenced block, fenced block without a language |
 | `small_scala_frame`, `verbatim`, `verbatim_lst_spaces`, `doclisting`, `real_verb` | `small-listing[...]`, `verbatim[...]`, `visible-spaces[...]`, `doclisting[...]`, `real-verb("...", spaces: true)` |
-| `\subsection*{T}` inside a part | `== T` |
+| `\part[3] \subsection*{T}` | `part(3, title: [T])[...]` (or `== T` in the body) |
 | `\remarkbox{...}`, `\titlebox{...}` | `remark-box[...]`, `title-box[...]` |
 | `\leerseite`, `\lastPage` | `leerseite()`, `last-page()` |
 | `\turnWarning`, `\turnpage`, `\lineSep` | `turn-warning()`, `turn-page()`, `line-sep()` |

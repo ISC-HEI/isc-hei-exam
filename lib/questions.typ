@@ -24,7 +24,7 @@
 #import "settings.typ": *
 #import "state.typ": *
 #import "points.typ": *
-#import "answers.typ": split-trailing-fill
+#import "answers.typ": split-trailing-fill, answer-line
 
 // One <isc-points> record. `number` is the visible question number.
 #let points-record(kind, points, bonus, title: none, number: none) = context [
@@ -76,9 +76,10 @@
 // Positional: question[Title], question[Title][intro]; or title: with the intro as body.
 // The heading is a real level-1 heading (PDF outline for free), built inside
 // `context` so the bookmark carries the resolved "(X points)".
-#let question(..args, title: none, points: none, bonus: false) = {
+#let question(..args, title: none, intro: none, points: none, bonus: false) = {
   let pos = args.pos()
-  let (title, body) = if title != none { (title, pos.at(0, default: none)) }
+  let (title, body) = if intro != none { (if title != none { title } else { pos.at(0, default: none) }, intro) }
+    else if title != none { (title, pos.at(0, default: none)) }
     else if pos.len() >= 2 { (pos.at(0), pos.at(1)) }
     else if pos.len() == 1 { (pos.at(0), none) }
     else { (none, none) }
@@ -105,11 +106,11 @@
 }
 #let bonus-question = question.with(bonus: true)
 
-// Shared rendering of a part / subpart row.
-#let labelled-row(target, label-width, label, body, above: part-above, below: part-below, margin: none, inline-points: none) = context {
+// Shared rendering of a part / subpart row. `inner` is the body without its
+// trailing fill (see split-trailing-fill).
+#let labelled-row(target, label-width, label, inner, above: part-above, below: part-below, margin: none, inline-points: none) = context {
   let applied = indent-state.get()
-  let (inner, trailing) = split-trailing-fill(body)
-  if is-empty(inner) and trailing == none {
+  if is-empty(inner) {
     // \part immediately followed by \subpart: LaTeX puts "(c)" and "1)" on the
     // same line. Emit a zero-height label so the next subpart shares the line.
     block(width: 100%, height: 0pt, inset: (left: target - applied), above: above, below: above, {
@@ -127,17 +128,21 @@
         inner
         indent-state.update(applied)
       }))
-  // A trailing 1fr answer space, hoisted after the container: LaTeX glue semantics.
-  if trailing != none { trailing }
 }
+
+// A part/subpart title (\part[3] \subsection*{T} in the LaTeX exams): a level-2
+// heading as the first line of the body.
+#let with-title(title, body) = if title == none { body } else { [== #title] + (if body == none { [] } else { body }) }
 
 #let inline-points(points, bonus) = if points == none { none } else {
   context [(#fmt-points(points) #ui(if bonus { "points-bonus" } else { "points" })) ]
 }
 
 // \part[points] — label "(a)", points in the margin (exam) or inline (series).
-#let part(..args, points: none, bonus: false) = {
+// `title:` puts a bold title on the first line (\subsection* inside the part).
+#let part(..args, points: none, bonus: false, title: none) = {
   let (points, body) = split-part-args(args.pos(), points)
+  let (inner, trailing) = split-trailing-fill(with-title(title, body))
   part-counter.step()
   subpart-counter.update(0)
   level-state.update("part")
@@ -145,16 +150,20 @@
   context {
     let exam = cfg("kind") == "exam"
     labelled-row(question-indent, part-label-width,
-      numbering(cfg("part-numbering", default: "(a)"), part-counter.get().first()), body,
+      numbering(cfg("part-numbering", default: "(a)"), part-counter.get().first()), inner,
       margin: if points != none and exam { margin-points(points, bonus, depth: 0) },
       inline-points: if not exam { inline-points(points, bonus) })
   }
+  // A trailing 1fr answer space, hoisted after the container: LaTeX glue semantics.
+  // Emitted outside the context block so that an enclosing part can hoist it again.
+  trailing
 }
 #let bonus-part = part.with(bonus: true)
 
 // \subpart[points] — label "1)".
-#let subpart(..args, points: none, bonus: false) = {
+#let subpart(..args, points: none, bonus: false, title: none) = {
   let (points, body) = split-part-args(args.pos(), points)
+  let (inner, trailing) = split-trailing-fill(with-title(title, body))
   subpart-counter.step()
   level-state.update("subpart")
   points-record("subpart", points, bonus)
@@ -162,13 +171,29 @@
     let exam = cfg("kind") == "exam"
     let in-part = part-counter.get().first() > 0
     labelled-row(subpart-base(), subpart-label-width,
-      numbering(cfg("subpart-numbering", default: "1)"), subpart-counter.get().first()), body,
+      numbering(cfg("subpart-numbering", default: "1)"), subpart-counter.get().first()), inner,
       above: subpart-gap, below: subpart-gap,
       margin: if points != none and exam { margin-points(points, bonus, depth: if in-part { 1 } else { 0 }) },
       inline-points: if not exam { inline-points(points, bonus) })
   }
+  trailing
 }
 #let bonus-subpart = subpart.with(bonus: true)
+
+// The "give the type and value of each expression" block: one subpart with an
+// answer line per (expression, answer) pair.
+//
+//   #short-answers(
+//     (`a + b`, [Int]),
+//     (`(d + b).toShort`, [Short]),
+//   )
+#let short-answers(..pairs, level: "subpart", length: auto, points: none) = {
+  let item = if level == "part" { part } else { subpart }
+  for p in pairs.pos() {
+    let (expr, ans) = if type(p) == array { (p.at(0), p.at(1, default: none)) } else { (p, none) }
+    item(points: points)[#expr #answer-line(ans, length: length)]
+  }
+}
 
 // \section{Title} of the series template: "Part N - Title", full width.
 #let section(title) = {

@@ -37,6 +37,7 @@
   confidential: false,          // true or a string: diagonal watermark
   instructions: none,           // content of the cover title box ("Consigne")
   grade-table: auto,            // auto | "simple" | "combined" | none
+  expected-total: none,         // the announced total; a red note appears on the cover if the points differ
   cover-top-space: 3cm,         // \vspace*{...} before the title rules (1.5cm in the sample exam)
   name-fields: (:),             // see cover.typ name-fields-default
   answer-line-length: auto,     // 3cm (exam) / 5.5cm (series)
@@ -112,7 +113,7 @@
   cfg-state.update((
     kind: kind, lang: lang, ui-lang: ui-lang, extra-i18n: extra-i18n,
     title: title, subtitle: subtitle, course: course, date: date, month: month,
-    teachers: teachers, revision: revision, footer-logo: footer-logo,
+    teachers: teachers, revision: revision, footer-logo: footer-logo, expected-total: expected-total,
     answer-line-length: all, part-numbering: part-numbering, subpart-numbering: subpart-numbering,
   ))
 

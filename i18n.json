@@ -28,7 +28,9 @@
     "remark": "Remark",
     "page": "Page",
     "revision": "Rev.",
-    "part": "Part"
+    "part": "Part",
+    "solution-label": "Solution :",
+    "total-mismatch": "Barème : $t points dans le document, $e attendus"
   },
   "en": {
     "question": "Question",
@@ -58,7 +60,9 @@
     "remark": "Remark",
     "page": "Page",
     "revision": "Rev.",
-    "part": "Part"
+    "part": "Part",
+    "solution-label": "Solution:",
+    "total-mismatch": "Points: $t in the document, $e expected"
   },
   "de": {
     "question": "Aufgabe",
@@ -88,6 +92,8 @@
     "remark": "Bemerkung",
     "page": "Seite",
     "revision": "Rev.",
-    "part": "Teil"
+    "part": "Teil",
+    "solution-label": "Lösung:",
+    "total-mismatch": "Punkte: $t im Dokument, $e erwartet"
   }
 }
