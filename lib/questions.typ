@@ -1,21 +1,30 @@
 // The question tree: question(), part(), subpart() and their bonus variants.
 //
+//   #question[Short questions]                     title only
+//   #question[Loops][Que vont afficher…]           title and intro
+//   #question(points: 3)[Debugging]                points on the question itself
+//   #part(3)[…]  #bonus-part(2)[…]  #subpart(1)[…]  points positional (points: 3 works too)
+//
 // Like \question / \part / \subpart in exam.cls, these are FLAT sibling calls:
 //
-//   #question(title: [Loops])[intro]
-//   #part(points: 4)[...]
+//   #question[Loops]
+//   #part(4)[...]
 //   #subpart[...]
 //   #pagebreak()
-//   #part(points: 2)[...]
+//   #part(2)[...]
 //
 // Typst forbids #pagebreak() inside containers, and a part is a container, so
 // keeping the calls flat is what lets a plain #pagebreak() between two parts
 // work. Nesting a #subpart inside a #part body is also accepted (the indent
 // adapts); use new-page() instead of pagebreak() in that case.
+//
+// A trailing answer(1fr) in a part body is hoisted out of the part so that it
+// behaves like LaTeX's \fill (see answers.typ).
 
 #import "settings.typ": *
 #import "state.typ": *
 #import "points.typ": *
+#import "answers.typ": split-trailing-fill
 
 // One <isc-points> record. `number` is the visible question number.
 #let points-record(kind, points, bonus, title: none, number: none) = context [
@@ -40,8 +49,8 @@
       align(left, text(size: size-normal)[\[#fmt-points(points) #unit\]])))
 }
 
-// Indented block for the body of a question / part / subpart. `target` is the
-// absolute indent the body must have; the enclosing indent is subtracted.
+// Indented block for the body of a question. `target` is the absolute indent
+// the body must have; the enclosing indent is subtracted.
 #let indented(target, above: 0pt, below: 0pt, body) = context {
   let applied = indent-state.get()
   block(width: 100%, inset: (left: target - applied), above: above, below: below, {
@@ -51,10 +60,28 @@
   })
 }
 
+// Positional arguments of part()/subpart(): a number is the points, content the body.
+#let split-part-args(pos, points) = {
+  let pts = points
+  let body = none
+  for a in pos {
+    if type(a) in (int, float) { pts = a } else { body = a }
+  }
+  (pts, body)
+}
+
+#let is-empty(body) = body == none or body == []
+
 // \titledquestion{Title}[points] / \question[points]
+// Positional: question[Title], question[Title][intro]; or title: with the intro as body.
 // The heading is a real level-1 heading (PDF outline for free), built inside
 // `context` so the bookmark carries the resolved "(X points)".
-#let question(title: none, points: none, bonus: false, body) = {
+#let question(..args, title: none, points: none, bonus: false) = {
+  let pos = args.pos()
+  let (title, body) = if title != none { (title, pos.at(0, default: none)) }
+    else if pos.len() >= 2 { (pos.at(0), pos.at(1)) }
+    else if pos.len() == 1 { (pos.at(0), none) }
+    else { (none, none) }
   if not bonus { question-counter.step() }
   qid-counter.step()
   part-counter.update(0)
@@ -72,73 +99,73 @@
     } else { [] }
     heading(level: 1, numbering: none, outlined: false, bookmarked: true, head + pts)
   }
-  if body != none and body != [] {
+  if not is-empty(body) {
     indented(question-indent, above: question-below, below: par-spacing, body)
   }
 }
 #let bonus-question = question.with(bonus: true)
 
+// Shared rendering of a part / subpart row.
+#let labelled-row(target, label-width, label, body, above: part-above, below: part-below, margin: none, inline-points: none) = context {
+  let applied = indent-state.get()
+  let (inner, trailing) = split-trailing-fill(body)
+  if is-empty(inner) and trailing == none {
+    // \part immediately followed by \subpart: LaTeX puts "(c)" and "1)" on the
+    // same line. Emit a zero-height label so the next subpart shares the line.
+    block(width: 100%, height: 0pt, inset: (left: target - applied), above: above, below: above, {
+      if margin != none { margin }
+      place(top + left, dy: 0.65em, label)
+    })
+    return
+  }
+  block(width: 100%, inset: (left: target - applied), above: above, below: below,
+    grid(columns: (label-width, 1fr),
+      { if margin != none { margin }; label },
+      {
+        indent-state.update(target + label-width)
+        if inline-points != none { inline-points }
+        inner
+        indent-state.update(applied)
+      }))
+  // A trailing 1fr answer space, hoisted after the container: LaTeX glue semantics.
+  if trailing != none { trailing }
+}
+
+#let inline-points(points, bonus) = if points == none { none } else {
+  context [(#fmt-points(points) #ui(if bonus { "points-bonus" } else { "points" })) ]
+}
+
 // \part[points] — label "(a)", points in the margin (exam) or inline (series).
-#let part(points: none, bonus: false, body) = {
+#let part(..args, points: none, bonus: false) = {
+  let (points, body) = split-part-args(args.pos(), points)
   part-counter.step()
   subpart-counter.update(0)
   level-state.update("part")
   points-record("part", points, bonus)
   context {
-    let applied = indent-state.get()
-    let kind = cfg("kind")
-    if body == none or body == [] {
-      // \part immediately followed by \subpart: LaTeX puts "(c)" and "1)" on the
-      // same line. Emit a zero-height label so the next subpart shares the line.
-      block(width: 100%, height: 0pt, inset: (left: question-indent - applied), above: part-above, below: part-above, {
-        if points != none and kind == "exam" { margin-points(points, bonus, depth: 0) }
-        place(top + left, dy: 0.65em, numbering(cfg("part-numbering", default: "(a)"), part-counter.get().first()))
-      })
-      return
-    }
-    block(width: 100%, inset: (left: question-indent - applied), above: part-above, below: part-below,
-      grid(columns: (part-label-width, 1fr),
-        {
-          if points != none and kind == "exam" { margin-points(points, bonus, depth: 0) }
-          numbering(cfg("part-numbering", default: "(a)"), part-counter.get().first())
-        },
-        {
-          indent-state.update(question-indent + part-label-width)
-          if points != none and kind != "exam" {
-            [(#fmt-points(points) #ui(if bonus { "points-bonus" } else { "points" })) ]
-          }
-          body
-          indent-state.update(applied)
-        }))
+    let exam = cfg("kind") == "exam"
+    labelled-row(question-indent, part-label-width,
+      numbering(cfg("part-numbering", default: "(a)"), part-counter.get().first()), body,
+      margin: if points != none and exam { margin-points(points, bonus, depth: 0) },
+      inline-points: if not exam { inline-points(points, bonus) })
   }
 }
 #let bonus-part = part.with(bonus: true)
 
 // \subpart[points] — label "1)".
-#let subpart(points: none, bonus: false, body) = {
+#let subpart(..args, points: none, bonus: false) = {
+  let (points, body) = split-part-args(args.pos(), points)
   subpart-counter.step()
   level-state.update("subpart")
   points-record("subpart", points, bonus)
   context {
-    let applied = indent-state.get()
-    let kind = cfg("kind")
-    let target = subpart-base()
-    block(width: 100%, inset: (left: target - applied), above: subpart-gap, below: subpart-gap,
-      grid(columns: (subpart-label-width, 1fr),
-        {
-          if points != none and kind == "exam" {
-            margin-points(points, bonus, depth: if part-counter.get().first() > 0 { 1 } else { 0 })
-          }
-          numbering(cfg("subpart-numbering", default: "1)"), subpart-counter.get().first())
-        },
-        {
-          indent-state.update(target + subpart-label-width)
-          if points != none and kind != "exam" {
-            [(#fmt-points(points) #ui(if bonus { "points-bonus" } else { "points" })) ]
-          }
-          body
-          indent-state.update(applied)
-        }))
+    let exam = cfg("kind") == "exam"
+    let in-part = part-counter.get().first() > 0
+    labelled-row(subpart-base(), subpart-label-width,
+      numbering(cfg("subpart-numbering", default: "1)"), subpart-counter.get().first()), body,
+      above: subpart-gap, below: subpart-gap,
+      margin: if points != none and exam { margin-points(points, bonus, depth: if in-part { 1 } else { 0 }) },
+      inline-points: if not exam { inline-points(points, bonus) })
   }
 }
 #let bonus-subpart = subpart.with(bonus: true)

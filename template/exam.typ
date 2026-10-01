@@ -39,11 +39,11 @@
 )
 
 // ═══════════════════════════════════════════════════════════════════════════
-#question(title: [Short questions])[
+#question[Short questions][
   Cette question est séparée en plusieurs exercices indépendants. Le nombre de point pour chaque exercice est indiqué dans la marge.
 ]
 
-#part(points: 4)[
+#part(4)[
   Soient les déclarations suivantes:
 
   ```scala
@@ -64,7 +64,7 @@
 #subpart[`if(true) '1' + baz else baz + '1'` #answer-line[String, "1y"]]
 #subpart[`baz + ('d' + 1.9).toChar + ('t'-1).toChar` #answer-line[String, "yes"]]
 
-#part(points: 1)[
+#part(1)[
   Quel est le contenu de `r` après l'exécution du code ci-dessous :
 
   ```scala
@@ -73,10 +73,10 @@
   "" + StringUtils.charAt(s, 2)
   ```
 
-  #solution-or-dotted-lines(1cm)[`"ok"`]
+  #answer(1cm)[`"ok"`]
 ]
 
-#part(points: 1)[
+#part(1)[
   Soit le code suivant :
 
   ```scala
@@ -85,13 +85,13 @@
   ```
 
   Quelle est la valeur de `b` ?
-  #inline-checkboxes([Elle dépend du contenu de `a`], correct-choice[`true`], [`false`])
+  #choices(inline: true, [Elle dépend du contenu de `a`], correct[`true`], [`false`])
 ]
 
-#bonus-part(points: 2)[
+#bonus-part(2)[
   Écrivez le code (sans fonction) permettant d'écrire tous les multiples de 79 plus grands que 1 et plus petits que 1000 sur la console.
 
-  #solution-or-dotted-lines(1fr)[
+  #answer(1fr)[
     ```scala
     for (i: Int <- 1 until 1000; if i % 79 == 0)
         println(i)
@@ -101,32 +101,33 @@
 
 #pagebreak()
 
-#part(points: 4)[
+#part(4)[
   Vrai ou faux ?
   #v(2.3em)
-  #begin-true-false()
-  #true-false[`(255+1).toByte == (0xFFFF+1).toShort`][true]
-  #true-false[Un générateur de séquence peut générer des `Double`][false]
-  #true-false[`0 to 10` est une séquence plus longue que `1 until 11`][true]
-  #true-false[`\` est le caractère d'échappement][true]
-  #true-false[Un programme qui compile fonctionne toujours correctement][false]
-  #true-false[Le compilateur détecte les erreurs de type][true]
-  #true-false[`println()` est une fonction qui retourne un `String`][false]
-  #true-false[Dans l'expression `if(foo) a else b`, `a` et `b` doivent être de même type][false]
+  #true-false(
+    is-true[`(255+1).toByte == (0xFFFF+1).toShort`],
+    is-false[Un générateur de séquence peut générer des `Double`],
+    is-true[`0 to 10` est une séquence plus longue que `1 until 11`],
+    is-true[`\` est le caractère d'échappement],
+    is-false[Un programme qui compile fonctionne toujours correctement],
+    is-true[Le compilateur détecte les erreurs de type],
+    is-false[`println()` est une fonction qui retourne un `String`],
+    is-false[Dans l'expression `if(foo) a else b`, `a` et `b` doivent être de même type],
+  )
   #v(1cm)
 ]
 
 // ═══════════════════════════════════════════════════════════════════════════
-#question(title: [Loops analysis], points: 8)[
+#question(points: 8)[Loops analysis][
   Que vont afficher *exactement* les boucles suivantes sur la console ?
 ]
 
 // LaTeX minipages never break across pages: keep the row together.
-#let loop-part(code, answer) = part[
+#let loop-part(code, output) = part[
   #block(breakable: false, grid(columns: (2em, 8cm, 5cm), column-gutter: 2em,
     [],
     code,
-    [Solution : #solution(height: 3.5cm, answer)]))
+    [Solution : #answer(blank: 3.5cm, output)]))
   #v(7mm)
 ]
 
@@ -192,7 +193,7 @@
 )
 
 // ═══════════════════════════════════════════════════════════════════════════
-#question(title: [EBNF grammars])[]
+#question[EBNF grammars]
 
 #part[
   Soit la grammaire suivante pour `exp`
@@ -205,26 +206,26 @@
   ```
 ]
 
-#subpart(points: 1)[
+#subpart(1)[
   Donnez une production valide la plus courte possible pour `exp`.
-  #solution-or-dotted-lines(1cm)[x ou alors y ou alors z]
+  #answer(1cm)[x ou alors y ou alors z]
 ]
 
-#subpart(points: 1)[
+#subpart(1)[
   Donnez une production utilisant chacune des règles de la grammaire.
-  #solution-or-dotted-lines(1cm)[`x + (z-y)`]
+  #answer(1cm)[`x + (z-y)`]
 ]
 
-#subpart(points: 1)[
+#subpart(1)[
   Donnez une production de `exp` utilisant au moins deux fois la règle `parexpr`.
 
-  #solution-or-dotted-lines(1cm)[`((x + x) - (y + z))`]
+  #answer(1cm)[`((x + x) - (y + z))`]
 ]
 
-#part(points: 3)[
+#part(3)[
   Écrivez la description EBNF de la grammaire _even-integer_ qui reconnaît uniquement les entiers pairs. Par exemple, dans cette grammaire -6 et 34 sont valides alors que 3 et -23 ne le sont pas. On considère également que 0 et -0 sont valides.
 
-  #solution-or-dotted-lines(1fr)[
+  #answer(1fr)[
     ```
     sign ::= '+' | '-'
     even-digit ::= '0' |'2' |'4' |'6' |'8'
@@ -237,7 +238,7 @@
 #pagebreak()
 
 // ═══════════════════════════════════════════════════════════════════════════
-#question(title: [Code comprehension])[
+#question[Code comprehension][
   Analysez la fonction suivante puis répondez aux questions ci-dessous.
   ```scala
   def isL(x: Char): Boolean = {
@@ -266,30 +267,30 @@
   ```
 ]
 
-#part(points: 2)[
+#part(2)[
   Expliquez avec des phrases à quoi sert la fonction `bar` ci-dessus.
 
-  #solution-or-dotted-lines(3cm)[
+  #answer(3cm)[
     La fonction sert à trouver la position du premier caractère de la chaîne qui n'est pas une lettre minuscule ou majuscule, par exemple un chiffre ou un espace par exemple. Si la chaîne est composée uniquement de lettres ou elle est vide, la fonction retourne -1.
   ]
 ]
 
-#part(points: 1)[
+#part(1)[
   Donnez *deux exemples* complets d'utilisation de `bar` permettant de démontrer votre explication.
 
-  #solution-or-dotted-lines(2cm)[
+  #answer(2cm)[
     Exemple 1 : `bar("Hello World")` retourne 5 et `bar("foo")` retourne -1.
   ]
 ]
 
 // ═══════════════════════════════════════════════════════════════════════════
-#question(title: [Writing functions])[]
+#question[Writing functions]
 
-#part(points: 2)[
+#part(2)[
   Écrivez une fonction nommée `foo` qui prend un `Double` nommé $x$ en argument et qui retourne la valeur
   $ italic("foo")(x) = (3x^2 + italic("sin")(x) - 3) / x^3 $
 
-  #solution-or-dotted-lines(5cm)[
+  #answer(5cm)[
     ```scala
     def foo(x: Double) : Double = {
         return (3*x*x + math.sin(x) - 3) / (x*x*x)
@@ -298,10 +299,10 @@
   ]
 ]
 
-#part(points: 2)[
+#part(2)[
   Écrivez une fonction retournant, à partir d'un nombre de jours entiers, le nombre correspondant de secondes.
 
-  #solution-or-dotted-lines(6cm)[
+  #answer(6cm)[
     ```scala
     def nSeconds(days: Int) : Int = {
         return days * 60 * 60 * 24
@@ -312,7 +313,7 @@
 
 #part[]
 
-#subpart(points: 3)[
+#subpart(3)[
   Écrivez une fonction nommée `factorFinder` qui affiche sur la console tous les diviseurs entiers (sans lui-même ni 1) d'un nombre entier passé en argument.
 
   Si le nombre n'a pas de diviseur (à part lui-même et 1 s'entend), affichez que c'est un nombre premier. *Par simplification, on considère que la fonction ne recevra que des nombres >= 3.* Exemple:
@@ -323,11 +324,10 @@
   factorFinder(3)  -> affiche "The whole dividers of 3 are : 3 is prime !"
   factorFinder(541) -> affiche "The whole dividers of 541 are : 541 is prime !"
   ```
-]
 
-// Written after the subpart, at the top level, so that the \fill leaves room
-// for the bonus subpart on the same page (LaTeX glue semantics).
-#solution-or-dotted-lines(1fr)[
+  // A trailing 1fr answer is hoisted out of the subpart by the library, so the
+  // bonus subpart below still fits on this page (LaTeX \fill semantics).
+  #answer(1fr)[
     ```scala
     def factorFinder(n: Int): Unit = {
         print(s"The whole dividers of $n are : ")
@@ -345,18 +345,19 @@
             print(s"$n is prime !")
     }
     ```
+  ]
 ]
 
-#bonus-subpart(points: 1)[
+#bonus-subpart(1)[
   Dans le code ci-dessus, on constate que le string affiché contient un espace à la fin. Comment pouvez-vous faire pour effacer ce caractère dans la console s'il a déjà été généré ?
 
-  #solution-or-dotted-lines(1cm)[Avec l'aide du caractère spécial `\b`]
+  #answer(1cm)[Avec l'aide du caractère spécial `\b`]
 ]
 
 #pagebreak()
 
 // ═══════════════════════════════════════════════════════════════════════════
-#question(title: [String manipulations])[
+#question[String manipulations][
   Considérez que vous avez à disposition dans votre code les fonctions suivantes pour manipuler les chaînes de caractères, *et uniquement celles-ci*.
 
   ```scala
@@ -367,7 +368,7 @@
   ```
 ]
 
-#part(points: 3)[
+#part(3)[
   == Progressive strings
   #figure(
     image("figs/ascii.svg", width: 147mm),   // 0.85\textwidth
@@ -383,7 +384,7 @@
   progressive("cZ") // Returns false
   ```
 
-  #solution-or-dotted-lines(1fr)[
+  #answer(1fr)[
     ```scala
     def progressive(s: String): Boolean = {
         var previous : Char = s.charAt(0)
@@ -403,7 +404,7 @@
 
 #pagebreak()
 
-#part(points: 4)[
+#part(4)[
   == Double vowels
 
   Écrivez la fonction `doubleVowels` qui reçoit un `String` en argument et retourne un `String`. Le `string` retourné correspond au `String` reçu mais avec toutes les voyelles qui ont été doublées. Pour cet exercice les voyelles sont : `a`, `e`, `i`, `o`, `u`, `y`.
@@ -414,7 +415,7 @@
   doubleVowels("aabb") // Returns "aaaabb"
   ```
 
-  #solution-or-dotted-lines(14cm)[
+  #answer(14cm)[
     ```scala
     def doubleVowels(s:String) : String = {
         var t: String = ""
@@ -446,7 +447,7 @@
   ]
 ]
 
-#part(points: 4)[
+#part(4)[
   == No triples
   Le clavier de votre ordinateur est défectueux: quand vous tapez 2x de suite la même touche, il écrit 3x de suite le même caractère !
 
@@ -455,7 +456,7 @@
   "J'ai fait cettte illlusion" devient "J'ai fait cette illusion"
   ```
 
-  #solution-or-dotted-lines(15cm)[
+  #answer(15cm)[
     ```scala
     def noTriples(s:String) : String = {
         var t: String = ""
@@ -484,7 +485,7 @@
 #pagebreak()
 
 // ═══════════════════════════════════════════════════════════════════════════
-#question(title: [Too fast, too furious], points: 5)[
+#question(points: 5)[Too fast, too furious][
   Afin d'améliorer la sécurité sur les routes, les pandores valaisans vont installer un nouveau radar ultra moderne. Ce radar est en effet capable de calculer la vitesse moyenne entre deux points séparés par une certaine distance.
 
   Une infraction est alors constatée si la vitesse moyenne du véhicule est supérieure à la limitation de vitesse en cours.
@@ -508,7 +509,7 @@
 
 #indent[
   Votre solution:
-  #solution-or-box(1fr)[
+  #answer(1fr, style: "box")[
     ```scala
     def averageSpeed(time1: Double, time2: Double, distance: Double) = (distance / (time2 - time1)) * 3.6
     def isFaster(speed: Double, maxSpeed: Double) = speed > maxSpeed

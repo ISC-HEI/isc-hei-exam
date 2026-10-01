@@ -63,36 +63,61 @@ The body font is **Source Sans 3** (the LaTeX template used its predecessor Sour
   instructions: [*Consigne :* Lisez attentivement la donnée …],
 )
 
-#question(title: [Short questions])[
+#question[Short questions][
   Cette question est séparée en plusieurs exercices indépendants.
 ]
 
-#part(points: 3)[
+#part(3)[
   Qu'affiche le code suivant ?
   ```scala
   println((1 to 3).sum)
   ```
-  #solution-or-dotted-lines(2cm)[`6`]
+  #answer(2cm)[`6`]
 ]
 
-#part(points: 1)[
-  Que vaut `true || !true` ? #inline-checkboxes(correct-choice[`true`], [`false`], [ça dépend])
+#part(1)[
+  Que vaut `true || !true` ? #choices(inline: true, correct[`true`], [`false`], [ça dépend])
 ]
 
-#bonus-part(points: 2)[
+#part(2)[
+  _Vrai ou faux ?_
+  #true-false(
+    is-true[`0 to 10` a 11 éléments],
+    is-false[`Array(1) == Array(1)` vaut `true`],
+  )
+]
+
+#bonus-part(2)[
   Écrivez la fonction `fact`.
-  #solution-or-dotted-lines(1fr)[```scala def fact(n: Int): Int = if (n <= 1) 1 else n * fact(n - 1)```]
+  #answer(1fr)[```scala def fact(n: Int): Int = if (n <= 1) 1 else n * fact(n - 1)```]
 ]
 
 #pagebreak()
 #last-page()
 ```
 
-Questions, parts and subparts are **flat, sibling calls**, exactly like `\question` / `\part` / `\subpart` in exam.cls. This is what lets a plain `#pagebreak()` between two parts work (Typst forbids page breaks inside containers). Nesting a `#subpart[...]` inside a `#part[...]` body is accepted too; use `new-page()` in that case. Points can be attached to a question (`question(points: 3)`), to a part or to a subpart, with `half` for ½ points.
+The whole vocabulary fits in a few lines:
 
-An answer space with height `1fr` written **inside** a part fills the rest of the page and pushes what follows to the next one. Written **after** the part call, at the top level, it behaves like LaTeX's `\fill` glue: what follows on the same page still fits and the space shrinks. Top-level answer spaces indent themselves to the current level.
+| | |
+|---|---|
+| `question[Title]`, `question[Title][intro]`, `question(points: 3)[Title]` | a numbered question; points on it, or summed from its parts |
+| `part(3)[…]`, `subpart(1)[…]`, `bonus-part(2)[…]`, `bonus-subpart(1)[…]` | `(a)`, `1)`, with `[3 Pt]` / `[2 Bo]` in the margin |
+| `answer(3cm)[solution]` | dotted lines for the students, the solution in a box for the teacher |
+| `answer(h, style: "lines")`, `answer(h, style: "box")`, `answer(blank: h)` | ruled lines, an empty frame, nothing |
+| `answer(1fr)[…]` | the rest of the page |
+| `answer-line[Int]` | a short rule at the right, the answer written on it in the solutions |
+| `choices(correct[…], […], […])`, `choices(inline: true, …)` | square boxes stacked, round boxes in the running text |
+| `true-false(is-true[…], is-false[…])` | the True / False rows with their dashed rules |
+| `solution[…]` | shown in the solutions only |
+| `last-page()`, `leerseite()`, `turn-page()`, `new-page()` | "The end", a blank page, "Turn page →", a page break inside a part |
+
+Questions, parts and subparts are **flat, sibling calls**, exactly like `\question` / `\part` / `\subpart` in exam.cls. This is what lets a plain `#pagebreak()` between two parts work (Typst forbids page breaks inside containers). Nesting a `#subpart[...]` inside a `#part[...]` body is accepted too; use `new-page()` in that case. `half` gives ½ points: `part(2 + half)`.
+
+An `answer(1fr)` written last in a part is hoisted out of the part by the library, so what follows on the same page still fits, like LaTeX's `\fill` glue. Elsewhere in a body, a `1fr` space fills the rest of the page and pushes what follows to the next one.
 
 ### From LaTeX to Typst
+
+The exam.cls names are kept as aliases; both columns compile.
 
 | exam.cls / options.tex | isc-hei-exam |
 |---|---|
@@ -100,20 +125,20 @@ An answer space with height `1fr` written **inside** a part fills the rest of th
 | `\def\exam{}` / the series preamble | `isc-exam.with(...)` / `series.with(...)` |
 | `\thetitle`, `\examDate`, `\examMonth`, `\rev`, first-page footer | `title:`, `date:`, `month:`, `revision:`, `teachers:` |
 | `\titlebox{...}` with the grade table | `instructions: [...]`, `grade-table: auto \| "simple" \| "combined" \| none` |
-| `\titledquestion{T}[p]`, `\question` | `question(title: [T], points: p)[intro]` |
-| `\bonusquestion` | `bonus-question(...)` |
-| `\part[p]`, `\bonuspart[p]`, `\subpart[p]`, `\bonussubpart[p]` | `part(points: p)[...]`, `bonus-part`, `subpart`, `bonus-subpart` |
+| `\titledquestion{T}[p]`, `\question` | `question[T]`, `question(points: p)[T]` (alias `question(title: [T], points: p)[intro]`) |
+| `\bonusquestion` | `bonus-question[T]` |
+| `\part[p]`, `\bonuspart[p]`, `\subpart[p]`, `\bonussubpart[p]` | `part(p)[...]`, `bonus-part(p)[...]`, `subpart(p)[...]`, `bonus-subpart(p)[...]` |
 | `2\half` | `2 + half` |
-| `\begin{solution}[h]` | `solution(height: h)[...]` |
-| `\begin{solutionordottedlines}[h]`, `[\fill]` | `solution-or-dotted-lines(h)[...]`, `solution-or-dotted-lines(1fr)[...]` |
-| `\begin{solutionorlines}[h]`, `\begin{solutionorbox}[h]` | `solution-or-lines(h)[...]`, `solution-or-box(h)[...]` |
+| `\begin{solutionordottedlines}[h]`, `[\fill]` | `answer(h)[...]`, `answer(1fr)[...]` (alias `solution-or-dotted-lines`) |
+| `\begin{solutionorlines}[h]`, `\begin{solutionorbox}[h]` | `answer(h, style: "lines")`, `answer(h, style: "box")` (aliases `solution-or-lines`, `solution-or-box`) |
+| `\begin{solution}[h]` | `answer(blank: h)[...]` or `solution(height: h)[...]`; `solution[...]` with no space |
 | `\fillwithdottedlines{h}`, `\fillwithlines{h}` | `fill-with-dotted-lines(h)`, `fill-with-lines(h)` |
 | `\answerline[ans]`, `\answerlinelength` | `answer-line[ans]`, `answer-line-length:` |
-| `\begin{checkboxes}` + `\choice` / `\correctchoice` | `checkboxes([...], correct-choice[...])` |
-| `\begin{oneparcheckboxes}` | `inline-checkboxes(...)` |
-| `\begintruefalse`, `\truefalse{s}{true}` | `begin-true-false()`, `true-false[s][true]` |
+| `\begin{checkboxes}` + `\choice` / `\correctchoice` | `choices([...], correct[...])` (aliases `checkboxes`, `correct-choice`) |
+| `\begin{oneparcheckboxes}` | `choices(inline: true, ...)` (alias `inline-checkboxes`) |
+| `\begintruefalse`, `\truefalse{s}{true}` | `true-false(is-true[s], is-false[s], ...)` (legacy `true-false[s][true]` per row still works) |
 | `\begin{scala}`, `\begin{verbatim_lst}` | ```` ```scala ```` fenced block, fenced block without a language |
-| `small_scala_frame`, `verbatim`, `verbatim_lst_spaces`, `doclisting`, `real_verb` | `small-listing[...]`, `verbatim[...]`, `visible-spaces[...]`, `doclisting[...]`, `real-verb("...")` |
+| `small_scala_frame`, `verbatim`, `verbatim_lst_spaces`, `doclisting`, `real_verb` | `small-listing[...]`, `verbatim[...]`, `visible-spaces[...]`, `doclisting[...]`, `real-verb("...", spaces: true)` |
 | `\subsection*{T}` inside a part | `== T` |
 | `\remarkbox{...}`, `\titlebox{...}` | `remark-box[...]`, `title-box[...]` |
 | `\leerseite`, `\lastPage` | `leerseite()`, `last-page()` |
@@ -125,7 +150,7 @@ An answer space with height `1fr` written **inside** a part fills the rest of th
 | tikz `[remember picture, overlay]` pictures | a top-level `place(bottom + right, dx: .., dy: .., image(..))` |
 | `\faBug` and other Font Awesome glyphs | not bundled: `text(font: "FontAwesome", str.from-unicode(0xf188))` with the font on your `TYPST_FONT_PATHS`, or the `fontawesome` Universe package |
 
-Known differences: the "Listing continues on next page…" notes of `mdframed` are not reproduced, checkboxes are always squares, and a LaTeX `\fill` sometimes printed only a few dotted lines where Typst fills the page.
+Known differences: the "Listing continues on next page…" notes of `mdframed` are not reproduced, and a LaTeX `\fill` sometimes printed only a few dotted lines where Typst fills the page.
 
 ## Checking against the LaTeX reference
 

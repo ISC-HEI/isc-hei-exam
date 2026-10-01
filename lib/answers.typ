@@ -1,24 +1,19 @@
 // Answer spaces: dotted lines, empty boxes, framed solutions, answer lines.
 //
-// Semantics follow exam.cls exactly:
-//   solution(height:)            students: blank space of `height`; solutions: framed box
-//   solution-or-dotted-lines(h)  students: dotted lines filling h;  solutions: framed box
-//   solution-or-lines(h)         students: solid lines filling h;   solutions: framed box
-//   solution-or-box(h)           students: empty framed box of h;   solutions: framed box
-// `h` is a length or `1fr` (LaTeX \fill: the rest of the page).
+//   #answer(3cm)[solution]                 students: 3cm of dotted lines;  solutions: framed box
+//   #answer(2cm, style: "lines")[…]        students: ruled lines
+//   #answer(1fr, style: "box")[…]          students: an empty framed box filling the page
+//   #answer(blank: 3cm)[…]                 students: 3cm of nothing
+//   #solution[…]                           students: nothing at all;        solutions: framed box
 //
-// About `1fr`: Typst resolves a fractional height against the enclosing
-// container. Inside a part body the container is the part itself, so the
-// space swallows the rest of the page and anything written after the part
-// moves to the next page. LaTeX's \fill is glue: what follows on the same page
-// still gets placed and the fill shrinks. To get that behaviour, write the
-// answer space AFTER the part / subpart call, at the top level:
+// `1fr` is LaTeX's \fill. Typst resolves a fractional height against the enclosing
+// container, so a 1fr space INSIDE a part would swallow the rest of the page and push
+// what follows to the next page. part() and subpart() therefore hoist a trailing
+// `answer(1fr)` out of their body, after the container, where it behaves like glue:
+// what follows on the same page still fits. Writing the space after the part call
+// yourself has the same effect.
 //
-//   #subpart(points: 3)[Écrivez la fonction ...]
-//   #solution-or-dotted-lines(1fr)[...]      ← fills what is left, next subpart may follow
-//   #bonus-subpart(points: 1)[...]
-//
-// Top-level answer spaces indent themselves to the current level automatically.
+// The exam.cls names (solution-or-dotted-lines, solution-or-box, …) remain available.
 
 #import "settings.typ": *
 #import "state.typ": *
@@ -26,8 +21,25 @@
 #let dotted-leader = box(width: 100%, repeat([.], gap: 0.3em))
 #let solid-leader = line(length: 100%, stroke: 0.4pt + black)
 
+// ── The page-fill marker (read by part() / subpart() to hoist the space) ───────
+#let fill-marker = metadata("isc-fill")
+#let with-fill-marker(height, body) = {
+  if type(height) == fraction { fill-marker }
+  body
+}
+#let is-fill-space(c) = c.has("children") and c.children.any(x => x.func() == metadata and x.value == "isc-fill")
+
+// Split `body` into (everything before, trailing fill space or none).
+#let split-trailing-fill(body) = {
+  if body == none or not body.has("children") { return (body, none) }
+  let ch = body.children
+  let i = ch.len() - 1
+  while i >= 0 and (ch.at(i).func() == parbreak or repr(ch.at(i).func()) == "space") { i -= 1 }
+  if i >= 0 and is-fill-space(ch.at(i)) { (ch.slice(0, i).join(), ch.at(i)) } else { (body, none) }
+}
+
 // A block of `height` filled with `leader` every \linefillheight (0.25in).
-#let fill-with(height, leader) = context {
+#let fill-with(height, leader) = with-fill-marker(height, context {
   let ind = top-level-indent()
   align(right, block(width: 100% - ind, height: height, breakable: false, above: 0.6em, below: 0.6em,
     layout(size => {
@@ -36,7 +48,7 @@
         place(top + left, dy: (i + 1) * line-fill-height - 0.4em, leader)
       }
     })))
-}
+})
 
 // \fillwithdottedlines{h} / \fillwithlines{h}
 #let fill-with-dotted-lines(height) = fill-with(height, dotted-leader)
@@ -53,27 +65,44 @@
 }
 
 // \begin{solution}[h]
-#let solution(height: none, body) = context {
+#let solution(height: none, body) = with-fill-marker(height, context {
   if solutions-state.get() { solution-box(body) }
   else if height != none { v(height) }
-}
+})
 
 // \begin{solutionordottedlines}[h]
-#let solution-or-dotted-lines(height, body) = context {
+#let solution-or-dotted-lines(height, body) = with-fill-marker(height, context {
   if solutions-state.get() { solution-box(body) } else { fill-with(height, dotted-leader) }
-}
+})
 
 // \begin{solutionorlines}[h]
-#let solution-or-lines(height, body) = context {
+#let solution-or-lines(height, body) = with-fill-marker(height, context {
   if solutions-state.get() { solution-box(body) } else { fill-with(height, solid-leader) }
-}
+})
 
 // \begin{solutionorbox}[h]
-#let solution-or-box(height, body) = context {
+#let solution-or-box(height, body) = with-fill-marker(height, context {
   if solutions-state.get() { solution-box(body) }
   else {
     let ind = top-level-indent()
     align(right, block(width: 100% - ind, height: height, stroke: solution-stroke + black, breakable: false, above: 0.6em, below: 0.6em))
+  }
+})
+
+// The one answer space. `answer(h)[sol]`, `answer(h, style: "lines" | "box")[sol]`,
+// `answer(blank: h)[sol]`. `h` is a length or 1fr.
+#let answer(..args, style: "dotted", blank: none) = {
+  let pos = args.pos()
+  assert(pos.len() >= 1, message: "answer: the solution body is missing")
+  let body = pos.last()
+  let height = if pos.len() >= 2 { pos.first() } else { none }
+  if blank != none { solution(height: blank, body) }
+  else {
+    assert(height != none, message: "answer: give a height, e.g. answer(3cm)[…] or answer(1fr)[…], or blank: h")
+    if style == "dotted" { solution-or-dotted-lines(height, body) }
+    else if style == "lines" { solution-or-lines(height, body) }
+    else if style == "box" { solution-or-box(height, body) }
+    else { panic("answer: style must be \"dotted\", \"lines\" or \"box\"") }
   }
 }
 

@@ -72,16 +72,18 @@
   Lesquelles de ces assignations sont valides ?
 ]
 
-#true-false[`val a: Int = 3.2`][false]
-#true-false[`val b: Double = 4`][true]
-#true-false[`val c: Int = (3 << 2.1).toByte`][false]
-#true-false[`val d: Long = (121.22f).toLong`][true]
-#true-false[`val e: Int = (24 / 21.11).toInt`][true]
-#true-false[`val f: Char = 'c'+1;`][false]
-#true-false[`val g: Float = (3 / 4.2);`][false]
-#true-false[`val h: Boolean = (f > g) & 2;`][false]
-#true-false[`val i: Boolean = (e >> f) < d;`][true]
-#true-false[`val j: Boolean = (a == c);`][true]
+#true-false(
+  is-false[`val a: Int = 3.2`],
+  is-true[`val b: Double = 4`],
+  is-false[`val c: Int = (3 << 2.1).toByte`],
+  is-true[`val d: Long = (121.22f).toLong`],
+  is-true[`val e: Int = (24 / 21.11).toInt`],
+  is-false[`val f: Char = 'c'+1;`],
+  is-false[`val g: Float = (3 / 4.2);`],
+  is-false[`val h: Boolean = (f > g) & 2;`],
+  is-true[`val i: Boolean = (e >> f) < d;`],
+  is-true[`val j: Boolean = (a == c);`],
+)
 
 // ═══════════════════════════════════════════════════════════════════════════
 #question[
@@ -141,7 +143,7 @@
   In binary it's 0b1111 1010 1100 1110
   ```
 
-  #solution-or-box(8cm)[
+  #answer(8cm, style: "box")[
     ```scala
     val foo: Int = 0xFACE
 
