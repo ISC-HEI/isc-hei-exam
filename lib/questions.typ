@@ -72,17 +72,47 @@
 
 #let is-empty(body) = body == none or body == []
 
+// ── Markers ───────────────────────────────────────────────────────────────────
+// Called WITHOUT a body, question / part / subpart return a marker; the text that
+// follows, up to the next marker, is their body. isc-exam() does the cutting
+// (see structure() below). Exactly the exam.cls way of writing:
+//
+//   #question[Short questions]
+//   Cette question est séparée en plusieurs exercices.
+//   #part(3)
+//   Qu'affiche le code suivant ?
+//   #answer(2cm)[…]
+//   #pagebreak()
+//   #part(4)
+//   …
+//   #end-parts()        ← back to the question level (\end{parts}), rarely needed
+//
+#let marker(kind, ..fields) = [#metadata((isc-marker: kind, ..fields.named()))<isc-marker>]
+
+// The marker dictionary of a child, or none. The markup label leaves the metadata
+// inside a small sequence (possibly with a space), hence the descent.
+#let marker-of(c) = {
+  if type(c) != content { return none }
+  if c.func() == metadata and type(c.value) == dictionary and "isc-marker" in c.value { return c.value }
+  if c.has("children") {
+    let real = c.children.filter(x => repr(x.func()) != "space")
+    if real.len() == 1 { return marker-of(real.first()) }
+  }
+  none
+}
+
 // \titledquestion{Title}[points] / \question[points]
 // Positional: question[Title], question[Title][intro]; or title: with the intro as body.
 // The heading is a real level-1 heading (PDF outline for free), built inside
 // `context` so the bookmark carries the resolved "(X points)".
-#let question(..args, title: none, intro: none, points: none, bonus: false) = {
-  let pos = args.pos()
-  let (title, body) = if intro != none { (if title != none { title } else { pos.at(0, default: none) }, intro) }
-    else if title != none { (title, pos.at(0, default: none)) }
-    else if pos.len() >= 2 { (pos.at(0), pos.at(1)) }
-    else if pos.len() == 1 { (pos.at(0), none) }
-    else { (none, none) }
+#let item-tag(kind) = metadata((isc-item: kind))
+#let item-of(c) = if type(c) == content and c.has("children") and c.children.len() > 0 {
+  let f = c.children.first()
+  if f.func() == metadata and type(f.value) == dictionary and "isc-item" in f.value { f.value.isc-item } else { none }
+} else { none }
+
+#let question-impl(title, points, bonus, body) = {
+  item-tag("question")
   if not bonus { question-counter.step() }
   qid-counter.step()
   part-counter.update(0)
@@ -104,13 +134,25 @@
     indented(question-indent, above: question-below, below: par-spacing, body)
   }
 }
+
+#let question(..args, title: none, intro: none, points: none, bonus: false) = {
+  let pos = args.pos()
+  let (title, body) = if intro != none { (if title != none { title } else { pos.at(0, default: none) }, intro) }
+    else if title != none { (title, pos.at(0, default: none)) }
+    else if pos.len() >= 2 { (pos.at(0), pos.at(1)) }
+    else if pos.len() == 1 { (pos.at(0), none) }
+    else { (none, none) }
+  if body == none { marker("question", title: title, points: points, bonus: bonus) }
+  else { question-impl(title, points, bonus, body) }
+}
 #let bonus-question = question.with(bonus: true)
 
 // Shared rendering of a part / subpart row. `inner` is the body without its
-// trailing fill (see split-trailing-fill).
+// trailing fill (see split-trailing-fill). `label: none` renders the continuation
+// of an item after a page break (no label, no points).
 #let labelled-row(target, label-width, label, inner, above: part-above, below: part-below, margin: none, inline-points: none) = context {
   let applied = indent-state.get()
-  if is-empty(inner) {
+  if is-empty(inner) and label != none {
     // \part immediately followed by \subpart: LaTeX puts "(c)" and "1)" on the
     // same line. Emit a zero-height label so the next subpart shares the line.
     block(width: 100%, height: 0pt, inset: (left: target - applied), above: above, below: above, {
@@ -139,46 +181,113 @@
 }
 
 // \part[points] — label "(a)", points in the margin (exam) or inline (series).
-// `title:` puts a bold title on the first line (\subsection* inside the part).
-#let part(..args, points: none, bonus: false, title: none) = {
-  let (points, body) = split-part-args(args.pos(), points)
+#let part-impl(points, bonus, title, body, continuation: false) = {
   let (inner, trailing) = split-trailing-fill(with-title(title, body))
-  part-counter.step()
-  subpart-counter.update(0)
-  level-state.update("part")
-  points-record("part", points, bonus)
+  item-tag("part")
+  if not continuation {
+    part-counter.step()
+    subpart-counter.update(0)
+    level-state.update("part")
+    points-record("part", points, bonus)
+  }
   context {
     let exam = cfg("kind") == "exam"
     labelled-row(question-indent, part-label-width,
-      numbering(cfg("part-numbering", default: "(a)"), part-counter.get().first()), inner,
-      margin: if points != none and exam { margin-points(points, bonus, depth: 0) },
-      inline-points: if not exam { inline-points(points, bonus) })
+      if continuation { none } else { numbering(cfg("part-numbering", default: "(a)"), part-counter.get().first()) }, inner,
+      margin: if points != none and exam and not continuation { margin-points(points, bonus, depth: 0) },
+      inline-points: if not exam and not continuation { inline-points(points, bonus) })
   }
   // A trailing 1fr answer space, hoisted after the container: LaTeX glue semantics.
   // Emitted outside the context block so that an enclosing part can hoist it again.
   trailing
 }
+
+// `title:` puts a bold title on the first line (\subsection* inside the part).
+// Without a body: a marker (see above).
+#let part(..args, points: none, bonus: false, title: none) = {
+  let (points, body) = split-part-args(args.pos(), points)
+  if is-empty(body) { marker("part", points: points, bonus: bonus, title: title) }
+  else { part-impl(points, bonus, title, body) }
+}
 #let bonus-part = part.with(bonus: true)
 
 // \subpart[points] — label "1)".
-#let subpart(..args, points: none, bonus: false, title: none) = {
-  let (points, body) = split-part-args(args.pos(), points)
+#let subpart-impl(points, bonus, title, body, continuation: false) = {
   let (inner, trailing) = split-trailing-fill(with-title(title, body))
-  subpart-counter.step()
-  level-state.update("subpart")
-  points-record("subpart", points, bonus)
+  item-tag("subpart")
+  if not continuation {
+    subpart-counter.step()
+    level-state.update("subpart")
+    points-record("subpart", points, bonus)
+  }
   context {
     let exam = cfg("kind") == "exam"
     let in-part = part-counter.get().first() > 0
     labelled-row(subpart-base(), subpart-label-width,
-      numbering(cfg("subpart-numbering", default: "1)"), subpart-counter.get().first()), inner,
+      if continuation { none } else { numbering(cfg("subpart-numbering", default: "1)"), subpart-counter.get().first()) }, inner,
       above: subpart-gap, below: subpart-gap,
-      margin: if points != none and exam { margin-points(points, bonus, depth: if in-part { 1 } else { 0 }) },
-      inline-points: if not exam { inline-points(points, bonus) })
+      margin: if points != none and exam and not continuation { margin-points(points, bonus, depth: if in-part { 1 } else { 0 }) },
+      inline-points: if not exam and not continuation { inline-points(points, bonus) })
   }
   trailing
 }
+
+#let subpart(..args, points: none, bonus: false, title: none) = {
+  let (points, body) = split-part-args(args.pos(), points)
+  if is-empty(body) { marker("subpart", points: points, bonus: bonus, title: title) }
+  else { subpart-impl(points, bonus, title, body) }
+}
 #let bonus-subpart = subpart.with(bonus: true)
+
+// \end{parts}: what follows belongs to the question again (unindented top level).
+#let end-parts() = marker("end")
+
+// ── Structure pass (called by isc-exam on the whole document) ─────────────────
+// Walks the top-level children; a marker opens an item that collects the children
+// up to the next marker. A #pagebreak() inside an item closes it, is emitted at the
+// top level, and the item continues unlabelled on the next page.
+#let is-blank(children) = children.all(c => c.func() == parbreak or repr(c.func()) == "space")
+
+#let render-item(m, buf, continuation: false) = {
+  let body = if is-blank(buf) { none } else { buf.join() }
+  // Nothing left of the item after a page break: render nothing (no empty row).
+  if continuation and body == none { return none }
+  let k = m.isc-marker
+  if k == "question" {
+    if continuation { if body != none { indented(question-indent, body) } }
+    else { question-impl(m.title, m.points, m.bonus, body) }
+  } else if k == "part" { part-impl(m.points, m.bonus, m.title, body, continuation: continuation) }
+  else if k == "subpart" { subpart-impl(m.points, m.bonus, m.title, body, continuation: continuation) }
+}
+
+#let structure(body) = {
+  let ch = if body == none { () } else if body.has("children") { body.children } else { (body,) }
+  let out = ()
+  let open = none        // (marker, continuation)
+  let buf = ()
+  let flush(open, buf, continuation) = if open != none { render-item(open, buf, continuation: continuation) } else { buf.join() }
+  let cont = false
+  for c in ch {
+    let m = marker-of(c)
+    if m != none {
+      out.push(flush(open, buf, cont)); buf = (); cont = false
+      open = if m.isc-marker == "end" { none } else { m }
+    } else if item-of(c) != none {
+      // a question / part / subpart written with brackets closes the open marker
+      out.push(flush(open, buf, cont)); buf = (); cont = false
+      open = none
+      out.push(c)
+    } else if open != none and c.func() == pagebreak {
+      out.push(flush(open, buf, cont)); buf = ()
+      out.push(c)
+      cont = true
+    } else {
+      buf.push(c)
+    }
+  }
+  out.push(flush(open, buf, cont))
+  out.join()
+}
 
 // The "give the type and value of each expression" block: one subpart with an
 // answer line per (expression, answer) pair.

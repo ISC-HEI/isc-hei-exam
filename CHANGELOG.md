@@ -5,6 +5,7 @@
 First release: a Typst port of the ISC LaTeX exam template (Philip Hirschhorn's `exam.cls` plus the ISC `options.tex`), calibrated page for page against the LaTeX renders of the two sample documents and of a real 14-page CS101 exam.
 
 ## Added
+- **Marker style, as in exam.cls**: `#question[T]`, `#part(3)`, `#subpart` written without a body own the text that follows, up to the next marker; `#pagebreak()` works anywhere (the item continues on the next page); `#end-parts()` returns to the question level. The bracketed form stays available.
 - **Short API**: `question[Title][intro]`, `part(3)[…]`, `answer(3cm)[…]` (`style: "lines" | "box"`, `blank: h`), `choices(correct[…], […])` with `inline: true`, `true-false(is-true[…], is-false[…])`. The exam.cls-named functions stay as aliases.
 - A trailing `answer(1fr)` inside a part or subpart is hoisted out of its container, through nested levels, so it behaves like LaTeX's `\fill` glue.
 - `short-answers(...)` (one subpart with an answer line per pair), `code-answer(code, output)` (the side-by-side loop layout), `part(title: ...)`, `question(intro: ...)`, and `expected-total:` on `isc-exam` (a red note on the cover when the points do not add up).

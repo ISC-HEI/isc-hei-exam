@@ -71,6 +71,12 @@
         if grade-mode != none { points.grade-table(mode: grade-mode) }
         v(3mm)
         text(size: size-small, points.exam-summary())
+        // Markers that were not consumed by structure(): a #part(3) inside a container.
+        let stray = query(<isc-marker>).len()
+        if stray > 0 {
+          v(2mm)
+          text(size: size-small, weight: "bold", fill: rgb("#D41367"), ui("stray-markers", params: (n: stray)))
+        }
         // Barème check: shown only when the sum of the points differs from expected-total.
         let expected = cfg("expected-total")
         if expected != none and points.num-points() != expected {

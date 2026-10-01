@@ -13,6 +13,7 @@
 #import "code.typ": listing-rules
 #import "headers.typ": *
 #import "cover.typ": exam-cover
+#import "questions.typ": structure
 
 #let isc-exam(
   kind: "exam",                 // "exam" | "series"
@@ -47,6 +48,8 @@
   body,
 ) = {
   assert(kind in ("exam", "series"), message: "isc-hei-exam: kind must be \"exam\" or \"series\"")
+  // Marker-style questions / parts / subparts: cut the document into items.
+  let body = structure(body)
   let is-exam = kind == "exam"
   let sol = resolve-solutions(solutions)
   let ui-lang = if ui-lang == auto { lang } else { ui-lang }

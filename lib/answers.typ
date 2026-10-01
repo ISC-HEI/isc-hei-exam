@@ -41,6 +41,10 @@
   if i < 0 { return (body, none) }
   let last = ch.at(i)
   if is-fill-space(last) { return (ch.slice(0, i).join(), last) }
+  // join() flattens sequences: the marker may sit right before the space itself.
+  if i >= 1 and ch.at(i - 1).func() == metadata and ch.at(i - 1).value == "isc-fill" {
+    return (ch.slice(0, i - 1).join(), (ch.at(i - 1), last).join())
+  }
   if last.has("children") {
     let (inner, trailing) = split-trailing-fill(last)
     if trailing != none { return ((ch.slice(0, i) + (inner,)).join(), trailing) }

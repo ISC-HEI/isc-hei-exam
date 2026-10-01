@@ -136,34 +136,32 @@
   ```
 ]
 
-#part[
-  A l'aide des opérateurs vus au cours, faites en sorte d'afficher sur la console le contenu de la variable `foo` sur la console comme suit :
+#part
+A l'aide des opérateurs vus au cours, faites en sorte d'afficher sur la console le contenu de la variable `foo` sur la console comme suit :
 
+```
+The value in hex is 0xface
+```
+
+#part
+~ [#h(0.15em)*Optionnel* ] Un peu plus difficile. Sans vous servir de votre ordinateur, écrivez le code pour faire en sorte d'afficher la valeur binaire comme suit. #warning-sign() Attention aux espaces~#warning-sign() :
+
+```
+In binary it's 0b1111 1010 1100 1110
+```
+
+#answer(8cm, style: "box")[
+  ```scala
+  val foo: Int = 0xFACE
+
+  println("The value in hex is 0x" + foo.toHexString)
+
+  println("In binary it's 0b"
+      + ((foo >> 12) & 0XF).toBinaryString
+      + " " + ((foo >> 8) & 0xF).toBinaryString
+      + " " + ((foo >> 4) & 0XF).toBinaryString
+      + " " + (foo & 0xF).toBinaryString)
   ```
-  The value in hex is 0xface
-  ```
-]
-
-#part[
-  ~ [#h(0.15em)*Optionnel* ] Un peu plus difficile. Sans vous servir de votre ordinateur, écrivez le code pour faire en sorte d'afficher la valeur binaire comme suit. #warning-sign() Attention aux espaces~#warning-sign() :
-
-  ```
-  In binary it's 0b1111 1010 1100 1110
-  ```
-
-  #answer(8cm, style: "box")[
-    ```scala
-    val foo: Int = 0xFACE
-
-    println("The value in hex is 0x" + foo.toHexString)
-
-    println("In binary it's 0b"
-        + ((foo >> 12) & 0XF).toBinaryString
-        + " " + ((foo >> 8) & 0xF).toBinaryString
-        + " " + ((foo >> 4) & 0XF).toBinaryString
-        + " " + (foo & 0xF).toBinaryString)
-    ```
-  ]
 ]
 
 // ═══════════════════════════════════════════════════════════════════════════

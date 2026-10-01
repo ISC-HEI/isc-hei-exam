@@ -60,48 +60,48 @@ The body font is **Source Sans 3** (the LaTeX template used its predecessor Sour
   course: [101.1 -- Programmation impérative],
   date: [29.1.2026], month: [Janvier 2026],
   teachers: [Dr P.-A. Mudry], revision: [Rev 1.0],
+  expected-total: 6,
   instructions: [*Consigne :* Lisez attentivement la donnée …],
 )
 
-#question[Short questions][
-  Cette question est séparée en plusieurs exercices indépendants.
-]
+#question[Short questions]
+Cette question est séparée en plusieurs exercices indépendants.
 
-#part(3)[
-  Qu'affiche le code suivant ?
-  ```scala
-  println((1 to 3).sum)
-  ```
-  #answer(2cm)[`6`]
-]
+#part(3)
+Qu'affiche le code suivant ?
+```scala
+println((1 to 3).sum)
+```
+#answer(2cm)[`6`]
 
-#part(1)[
-  Que vaut `true || !true` ? #choices(inline: true, correct[`true`], [`false`], [ça dépend])
-]
+#part(1)
+Que vaut `true || !true` ? #choices(inline: true, correct[`true`], [`false`], [ça dépend])
 
-#part(2)[
-  _Vrai ou faux ?_
-  #true-false(
-    is-true[`0 to 10` a 11 éléments],
-    is-false[`Array(1) == Array(1)` vaut `true`],
-  )
-]
-
-#bonus-part(2)[
-  Écrivez la fonction `fact`.
-  #answer(1fr)[```scala def fact(n: Int): Int = if (n <= 1) 1 else n * fact(n - 1)```]
-]
+#part(2)
+_Vrai ou faux ?_
+#true-false(
+  is-true[`0 to 10` a 11 éléments],
+  is-false[`Array(1) == Array(1)` vaut `true`],
+)
 
 #pagebreak()
+
+#question[Récursivité]
+#part(4)
+Écrivez la fonction `fact`.
+#answer(1fr)[```scala def fact(n: Int): Int = if (n <= 1) 1 else n * fact(n - 1)```]
+
 #last-page()
 ````
+
+As in exam.cls, `#question[…]`, `#part(3)` and `#subpart` are **markers**: what follows belongs to them, up to the next marker. There is nothing to close, and `#pagebreak()` works anywhere, the item simply continues on the next page. `#end-parts()` returns to the question level (`\end{parts}`), which is rarely needed. The bracketed form `#part(3)[…]` is still accepted when a body must be explicit.
 
 The whole vocabulary fits in a few lines:
 
 | | |
 |---|---|
-| `question[Title]`, `question[Title][intro]`, `question(points: 3)[Title]` | a numbered question; points on it, or summed from its parts |
-| `part(3)[…]`, `subpart(1)[…]`, `bonus-part(2)[…]`, `bonus-subpart(1)[…]` | `(a)`, `1)`, with `[3 Pt]` / `[2 Bo]` in the margin |
+| `question[Title]`, `question(points: 3)[Title]` | a numbered question; the text that follows is its intro |
+| `part(3)`, `subpart(1)`, `bonus-part(2)`, `bonus-subpart(1)` | `(a)`, `1)`, with `[3 Pt]` / `[2 Bo]` in the margin; `title:` for a bold first line |
 | `answer(3cm)[solution]` | dotted lines for the students, the solution in a box for the teacher |
 | `answer(h, style: "lines")`, `answer(h, style: "box")`, `answer(blank: h)` | ruled lines, an empty frame, nothing |
 | `answer(1fr)[…]` | the rest of the page |
@@ -114,9 +114,9 @@ The whole vocabulary fits in a few lines:
 | `part(3, title: [Partie 1])[…]` | a bold title on the first line of the part (`\subsection*` in the LaTeX exams) |
 | `last-page()`, `leerseite()`, `turn-page()`, `new-page()` | "The end", a blank page, "Turn page →", a page break inside a part |
 
-Two things that look like tricks are intended: `#part(4)` with no brackets puts `(c)` on the same line as the first subpart, as exam.cls does; and `isc-exam(expected-total: 45)` prints a red note on the cover when the points in the document do not add up to the announced total.
+`isc-exam(expected-total: 45)` prints a red note on the cover when the points in the document do not add up to the announced total, and another one if a marker ended up inside a container (a `#part(3)` written inside brackets), where the library cannot see it.
 
-A question that has an intro but no title takes it as `question(intro: [...])`. Questions, parts and subparts are **flat, sibling calls**, exactly like `\question` / `\part` / `\subpart` in exam.cls. This is what lets a plain `#pagebreak()` between two parts work (Typst forbids page breaks inside containers). Nesting a `#subpart[...]` inside a `#part[...]` body is accepted too; use `new-page()` in that case. `half` gives ½ points: `part(2 + half)`.
+A question with an intro and no title: `question(intro: [...])`. A part with no text of its own, `#part(4)` directly followed by `#subpart`, puts `(c)` and `1)` on one line like exam.cls. `half` gives ½ points: `part(2 + half)`.
 
 An `answer(1fr)` written last in a part or subpart is hoisted out of its container by the library, through nested levels, so what follows on the same page still fits, like LaTeX's `\fill` glue. Elsewhere in a body, a `1fr` space fills the rest of the page and pushes what follows to the next one.
 
@@ -130,9 +130,10 @@ The exam.cls names are kept as aliases; both columns compile.
 | `\def\exam{}` / the series preamble | `isc-exam.with(...)` / `series.with(...)` |
 | `\thetitle`, `\examDate`, `\examMonth`, `\rev`, first-page footer | `title:`, `date:`, `month:`, `revision:`, `teachers:` |
 | `\titlebox{...}` with the grade table | `instructions: [...]`, `grade-table: auto \| "simple" \| "combined" \| none` |
-| `\titledquestion{T}[p]`, `\question` | `question[T]`, `question(points: p)[T]` (alias `question(title: [T], points: p)[intro]`) |
+| `\titledquestion{T}[p]`, `\question` | `question[T]`, `question(points: p)[T]` |
 | `\bonusquestion` | `bonus-question[T]` |
-| `\part[p]`, `\bonuspart[p]`, `\subpart[p]`, `\bonussubpart[p]` | `part(p)[...]`, `bonus-part(p)[...]`, `subpart(p)[...]`, `bonus-subpart(p)[...]` |
+| `\part[p]`, `\bonuspart[p]`, `\subpart[p]`, `\bonussubpart[p]` | `part(p)`, `bonus-part(p)`, `subpart(p)`, `bonus-subpart(p)` (markers; `part(p)[...]` with an explicit body also works) |
+| `\begin{parts}`, `\end{parts}` | nothing, `end-parts()` |
 | `2\half` | `2 + half` |
 | `\begin{solutionordottedlines}[h]`, `[\fill]` | `answer(h)[...]`, `answer(1fr)[...]` (alias `solution-or-dotted-lines`) |
 | `\begin{solutionorlines}[h]`, `\begin{solutionorbox}[h]` | `answer(h, style: "lines")`, `answer(h, style: "box")` (aliases `solution-or-lines`, `solution-or-box`) |
@@ -148,7 +149,7 @@ The exam.cls names are kept as aliases; both columns compile.
 | `\remarkbox{...}`, `\titlebox{...}` | `remark-box[...]`, `title-box[...]` |
 | `\leerseite`, `\lastPage` | `leerseite()`, `last-page()` |
 | `\turnWarning`, `\turnpage`, `\lineSep` | `turn-warning()`, `turn-page()`, `line-sep()` |
-| `\newpage` between parts / inside a part | `#pagebreak()` / `new-page()` |
+| `\newpage` | `#pagebreak()`, anywhere |
 | `\todo{}`, `\colored{}`, `\bigO{}`, `\vspc`, `\warning` | `todo[]`, `colored[]`, `big-o()`, `visible-space()`, `warning-sign()` |
 | `\section{T}` (series) | `section[T]` |
 | `\def\confidential{}` | `confidential: true` |
