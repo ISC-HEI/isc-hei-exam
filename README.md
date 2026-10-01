@@ -52,7 +52,7 @@ The body font is **Source Sans 3** (the LaTeX template used its predecessor Sour
 
 ## Writing an exam
 
-```typst
+````typst
 #import "@preview/isc-hei-exam:0.1.0": *
 
 #show: isc-exam.with(
@@ -94,7 +94,7 @@ The body font is **Source Sans 3** (the LaTeX template used its predecessor Sour
 
 #pagebreak()
 #last-page()
-```
+````
 
 The whole vocabulary fits in a few lines:
 
