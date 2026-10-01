@@ -16,6 +16,7 @@
 #import "@preview/isc-hei-exam:0.1.0": *
 
 #show: isc-exam.with(
+  solutions: auto,              // true prints the solutions; auto follows --input solutions=true
   title: [Test intermédiaire],
   course: [101.1 -- Programmation impérative],
   date: [27.10.2026],

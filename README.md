@@ -48,7 +48,7 @@ typst compile --input solutions=true exam.typ exam-sol.pdf
 typst compile series.typ
 ```
 
-The body font is **Source Sans 3** (the LaTeX template used its predecessor Source Sans Pro). It is available in the Typst web app; locally, install it once (Google Fonts, or your package manager) and check that `typst fonts` lists it. When it is missing, the document renders a single page telling you so instead of silently using another font; pass `check-fonts: false` to render anyway. Code uses DejaVu Sans Mono, which ships with Typst.
+The body font is **Source Sans 3** (the LaTeX template used its predecessor Source Sans Pro). It is available in the Typst web app; locally, run `bash fonts/install_fonts.sh` once (the ISC font bundle, SIL Open Font License, Linux and macOS) and check that `typst fonts` lists it. When it is missing, the document renders a single page telling you so instead of silently using another font; pass `check-fonts: false` to render anyway. Code uses DejaVu Sans Mono, which ships with Typst.
 
 ## Writing an exam
 
@@ -181,7 +181,7 @@ Only Typst is needed to write exams. The rest serves the development and the com
 | Tool | Required for | Linux (Debian/Ubuntu) | macOS (Homebrew) |
 | --- | --- | --- | --- |
 | **typst** ≥ 0.15 | compiling | [GitHub release](https://github.com/typst/typst/releases) | `brew install typst` |
-| **Source Sans 3** | the body font | `apt install fonts-adobe-sourcesans3` | [Google Fonts](https://fonts.google.com/specimen/Source+Sans+3) |
+| **Source Sans 3** | the body font | `bash fonts/install_fonts.sh` | `bash fonts/install_fonts.sh` |
 | **just** | the development recipes | `apt install just` | `brew install just` |
 | **poppler-utils** | tests, `compare-exam.sh` | `apt install poppler-utils` | `brew install poppler` |
 | **ImageMagick** | the comparison montages | `apt install imagemagick` | `brew install imagemagick` |

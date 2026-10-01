@@ -20,4 +20,5 @@ First release: a Typst port of the ISC LaTeX exam template (Philip Hirschhorn's 
 - **Helpers**: `title-box`, `remark-box`, `leerseite`, `last-page`, `turn-page`, `turn-warning`, `new-page`, `line-sep`, `todo`, `colored`, `big-o`, `visible-space`, `warning-sign`.
 - **Student and solution output from one source**: `typst compile --input solutions=true`, or `solutions: true`.
 - UI strings in French (reproducing the LaTeX template's mix), English and German; `extra-i18n` overrides.
+- `fonts/install_fonts.sh`: installs the ISC font bundle (Source Sans 3 and the rest, SIL OFL) for a local `typst`, on Linux and macOS.
 - `tools/compare-exam.sh`: side-by-side pages of a Typst exam and its LaTeX reference PDF, with page-count and question-structure checks.

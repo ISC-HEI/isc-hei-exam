@@ -10,7 +10,7 @@ description = "Written exams and exercise series for the 'Informatique et systè
 keywords = ["exam", "test", "exercises", "series", "quiz", "grading", "ISC", "university", "Informatique et systèmes de communication", "HES-SO Valais", "Sion", "HEI", "School of engineering"]
 categories = ["office"]
 disciplines = ["computer-science", "engineering", "education"]
-exclude = ["examples", "tests", "tools", "scripts", "Justfile", "CONTRIBUTING.md", "CLAUDE.md", ".github", "*.pdf", "*.code-workspace"]
+exclude = ["examples", "tests", "tools", "scripts", "fonts", "Justfile", "CONTRIBUTING.md", "CLAUDE.md", ".github", "*.pdf", "*.code-workspace"]
 
 [template]
 path = "template"

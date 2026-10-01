@@ -13,6 +13,7 @@
 #import "@preview/isc-hei-exam:0.1.0": *
 
 #show: series.with(
+  solutions: auto,              // true prints the solutions; auto follows --input solutions=true
   title: [Série 2],
   subtitle: [Expressions],
   revision: [1.05],

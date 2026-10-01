@@ -13,6 +13,11 @@ default:
 [group('dev')]
 dev: link test
 
+# install the ISC font bundle (Source Sans 3, …) for the local typst
+[group('dev')]
+fonts:
+	bash fonts/install_fonts.sh
+
 # (re)link @preview/isc-hei-exam:<version> → this repository (self-heals after a pack)
 [group('dev')]
 link:
