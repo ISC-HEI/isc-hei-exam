@@ -96,7 +96,7 @@
   )
 
   // ── Headings: level 1 = question (built by question()), level 2 = \subsection*
-  show heading.where(level: 1): it => block(width: 100%, above: question-above, below: question-below,
+  show heading.where(level: 1): it => block(width: 100%, above: question-above, below: question-below, inset: (bottom: question-gap),
     text(size: if is-exam { size-Large } else { size-large }, weight: "regular", it.body))
   // Part / subpart labels are headings too (for editor outlines): render them as
   // the bare label, the title (if any) is already typeset in the body.

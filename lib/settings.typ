@@ -51,6 +51,7 @@
 #let par-spacing = 0.55em
 #let question-above = 1.4em
 #let question-below = 0.35em
+#let question-gap = 2mm       // extra space under a question heading, kept even when a part follows
 #let part-above = 0.85em
 #let part-below = 0.35em
 #let subpart-gap = 0.6em      // \subpart item separation (measured on exam3 p3)
@@ -90,3 +91,4 @@
 #let isc-software = rgb(140, 198, 230) // Informatique logicielle
 #let isc-data = rgb(247, 241, 159)     // Ingénierie des données
 #let isc-magenta = rgb("#EC008B")      // signature accent (sampled from the LaTeX logo)
+#let bonus-color = isc-magenta          // bonus points in the margin

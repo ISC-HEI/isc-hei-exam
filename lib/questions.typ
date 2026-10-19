@@ -38,15 +38,21 @@
   )) <isc-points>
 ]
 
-// "[4 Pt]" / "[2 Bo]" in the left margin, aligned with the first line of the
+// "[4 Pt]" / a framed "Bonus +2 Pt" in the left margin, aligned with the first line of the
 // part. Emitted inside the label cell, hence body-relative: it follows the
 // binding offset on odd/even pages exactly like \pointsinmargin does.
 #let margin-points(points, bonus, depth: 0) = context {
-  let unit = if bonus { emph(ui("bonus-abbrev")) } else { ui("points-abbrev") }
   let extra = if depth == 1 { part-label-width } else { 0mm }
+  // Bonus points stand out: framed and coloured, still readable on a B/W print.
+  let mark = if bonus {
+    box(stroke: 0.6pt + bonus-color, radius: 1.5pt, inset: (x: 2pt, y: 1.5pt), outset: (y: 0.5pt),
+      text(size: size-normal, fill: bonus-color, weight: "bold",
+        align(center, [#ui("grade-bonus") \ +#fmt-points(points) #ui("points-abbrev")])))
+  } else {
+    text(size: size-normal)[\[#fmt-points(points) #ui("points-abbrev")\]]
+  }
   place(top + left, dx: -(margin-points-offset + extra),
-    box(width: margin-points-width,
-      align(left, text(size: size-normal)[\[#fmt-points(points) #unit\]])))
+    box(width: margin-points-width, align(left, mark)))
 }
 
 // Indented block for the body of a question. `target` is the absolute indent
