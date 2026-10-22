@@ -18,7 +18,7 @@
 // Typst offers no hook on the fragments of a broken block.
 
 #import "settings.typ": *
-#import "fonts.typ": raw-font, body-font
+#import "fonts.typ": raw-font, inline-raw-font, body-font
 
 #let listing-default = (numbers: auto, size: auto, frame: true, spaces: false)
 #let listing-state = state("isc-listing", listing-default)
@@ -40,7 +40,8 @@
   // 0.8em, so the factor is applied on top of that (0.85 / 0.8).
   let raw-size = listing-scale / 0.8 * 1em
   set raw(theme: "../assets/isc-exam.tmTheme")
-  show raw.where(block: false): set text(font: raw-font, size: raw-size)
+  // No programming ligatures (Fira Code would print != as ≠): calt carries them.
+  show raw.where(block: false): set text(font: inline-raw-font, size: raw-size, ligatures: false, features: (calt: 0))
 
   show raw.where(block: true): it => context {
     let st = listing-state.get()

@@ -1,5 +1,5 @@
 {
-  "_comment": "UI strings. The `fr` set deliberately reproduces the historical ISC LaTeX template, which mixed French field labels with the English boilerplate of exam.cls (Question, True/False, The end, ...). Override any key with `extra-i18n`.",
+  "_comment": "UI strings. The `fr` set deliberately reproduces the historical ISC LaTeX template, which mixed French field labels with the English boilerplate of exam.cls (Question, True/False, The end, ...), except the cover summary line, which is in French. Override any key with `extra-i18n`.",
   "fr": {
     "question": "Question",
     "question-bonus": "Question bonus",
@@ -22,7 +22,7 @@
     "grade-bonus": "Bonus",
     "grade-score": "Score",
     "grade-total": "Total:",
-    "exam-summary": "This exam has $n questions, for a total of $p points.",
+    "exam-summary": "Cet examen comporte $n questions, pour un total de $p points.",
     "name-field": "Nom/Prénom :",
     "class-field": "Classe :",
     "remark": "Remark",

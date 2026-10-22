@@ -140,10 +140,13 @@
     } else if is-exam {
       exam-cover(instructions: instructions, grade-mode: grade-table, top-space: cover-top-space,
         logo: logo, logo-width: logo-width, logo-pos: logo-pos, name-fields: name-fields)
+      // After the cover, so that the banner is drawn over it.
+      if check-fonts and not inline-raw-font-available() { missing-mono-banner() }
       pagebreak()
       body
     } else {
       // Series: centred title block, then the questions on the same page.
+      if check-fonts and not inline-raw-font-available() { missing-mono-banner() }
       align(center, {
         let t = if sol { [#title -- #ui("solution-suffix")] }
           else if subtitle != none { [#title -- #subtitle] } else { title }

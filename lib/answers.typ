@@ -131,19 +131,18 @@
     else if lvl == "subpart" { numbering(cfg("subpart-numbering", default: "1)"), subpart-counter.get().first()) }
     else { none }
   let ans = if solutions-state.get() and answer != none { strong(answer) } else { none }
-  // exam.cls sets the answer in \hbox to \answerlinelength{\hfil #1\hss}: centred on the
-  // rule, and when it is wider than the rule it starts at the rule and overflows to
-  // the right on ONE line — never wrapped.
-  let ans = if ans == none { none } else {
-    let aw = measure(ans).width          // natural single-line width
-    let one-line = box(width: aw, ans)   // a box sized to it cannot wrap
-    if aw > w { align(left, one-line) } else { align(center, one-line) }
-  }
+  // exam.cls centres the answer on the rule and lets a longer one overflow past the
+  // right margin. Here a longer answer widens the rule to the left instead (the
+  // student version keeps the fixed length), and wraps only beyond 85 % of the line.
   // exam.cls: \par \nobreak \vskip \answerskip (2ex) then the label and the rule.
   // The trailing space is an explicit v(): a block's `below` is dropped when the
   // answer line is the last thing in a part, which it almost always is.
-  block(width: 100%, above: 1.3em, below: 0pt,
-    align(right, box[#label#h(0.3em)#box(width: w, stroke: (bottom: 0.4pt + black), inset: (bottom: 1.5pt), ans)]))
+  block(width: 100%, above: 1.3em, below: 0pt, layout(size => {
+    let aw = if ans == none { 0pt } else { measure(ans).width }   // natural single-line width
+    let rw = calc.min(calc.max(w, aw), 0.85 * size.width)
+    let shown = if ans == none { none } else if aw <= rw { align(center, box(width: aw, ans)) } else { ans }
+    align(right, box[#label#h(0.3em)#box(width: rw, stroke: (bottom: 0.4pt + black), inset: (bottom: 1.5pt), shown)])
+  }))
   v(0.7em)
 }
 

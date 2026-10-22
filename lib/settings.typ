@@ -64,7 +64,7 @@
 #let solution-stroke = 0.4pt        // TheSolution \fbox rule (0.4pt = \fboxrule)
 
 // ── Listings (options.tex, listings + mdframed) ───────────────────────────────
-#let listing-back = luma(242)          // mdframed backgroundcolor=black!5   (sampled: #F2F2F2)
+#let listing-back = luma(238)          // a shade darker than mdframed backgroundcolor=black!5 (#F2F2F2)
 #let listing-frame = luma(64)          // mdframed middlelinecolor=black!75  (sampled: #404040)
 #let listing-numbers = rgb("#B3B2B3")  // \definecolor{listing-numbers}{HTML}{B3B2B3}
 #let listing-radius = 4pt              // roundcorner=4
