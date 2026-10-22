@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Bump the package version everywhere it appears:
 #   typst.toml, the `@preview/isc-hei-exam:X.Y.Z` imports of template/*.typ,
-#   README.md and tests/.
+#   README.md and tests/, and the README links pinned to the `vX.Y.Z` git tag
+#   (typst/packages asks for permalinks, so tag the release commit `vX.Y.Z`).
 #
 #   scripts/bump-version            patch  0.1.0 → 0.1.1
 #   scripts/bump-version minor      minor  0.1.1 → 0.2.0
@@ -30,4 +31,6 @@ while IFS= read -r f; do
     echo "  updated $f"
   fi
 done < <(find template tests README.md -type f \( -name '*.typ' -o -name '*.md' -o -name '*.sh' -o -name '*.txt' \) 2>/dev/null)
+perl -pi -e "s|(github(?:usercontent)?\.com/ISC-HEI/$PKG_NAME/(?:blob/)?)v[0-9]+\.[0-9]+\.[0-9]+/|\${1}v$NEW/|g" README.md
+echo "  updated README.md tag links → v$NEW"
 echo "Done. Re-run 'just dev' to relink @preview/$PKG_NAME:$NEW."

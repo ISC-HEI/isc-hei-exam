@@ -1,13 +1,13 @@
 <picture>
   <source media="(prefers-color-scheme: dark)"
-          srcset="https://raw.githubusercontent.com/ISC-HEI/isc-logos/main/white/ISC%20Logo%20inline%20white%20v3%20-%20large.webp">
+          srcset="https://raw.githubusercontent.com/ISC-HEI/isc-logos/4f56bc8f4d6602f4ac80c0cc254bacbbd89bf143/white/ISC%20Logo%20inline%20white%20v3%20-%20large.webp">
   <img align="right" height="50" alt="ISC Logo"
-       src="https://raw.githubusercontent.com/ISC-HEI/isc-logos/main/black/ISC%20Logo%20inline%20black%20v3%20-%20large.webp"/>
+       src="https://raw.githubusercontent.com/ISC-HEI/isc-logos/4f56bc8f4d6602f4ac80c0cc254bacbbd89bf143/black/ISC%20Logo%20inline%20black%20v3%20-%20large.webp"/>
 </picture>
 
-[![CI](https://github.com/ISC-HEI/isc-hei-exam/actions/workflows/ci.yml/badge.svg)](https://github.com/ISC-HEI/isc-hei-exam/actions/workflows/ci.yml)
+[![CI status](https://github.com/ISC-HEI/isc-hei-exam/actions/workflows/ci.yml/badge.svg)](https://github.com/ISC-HEI/isc-hei-exam/actions/workflows/ci.yml)
 [![Typst Universe](https://img.shields.io/badge/Typst%20Universe-isc--hei--exam-239dad?logo=typst&logoColor=white)](https://typst.app/universe/package/isc-hei-exam)
-[![License: MIT](https://img.shields.io/badge/license-MIT-brightgreen)](https://github.com/ISC-HEI/isc-hei-exam/blob/main/LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-brightgreen)](https://github.com/ISC-HEI/isc-hei-exam/blob/v0.1.0/LICENSE)
 
 # isc-hei-exam — written exams and exercise series
 
@@ -17,9 +17,9 @@ The [Typst](https://typst.app/) template for written exams and exercise series o
 
 | Cover | Questions | Solutions |
 |:---:|:---:|:---:|
-| <a href="https://github.com/ISC-HEI/isc-hei-exam/blob/main/examples/exam.pdf?raw=true"><img src="thumbnail.png" width="230" alt="Cover of the sample exam"></a> | <a href="https://github.com/ISC-HEI/isc-hei-exam/blob/main/examples/exam.pdf?raw=true">exam.pdf</a> — 12 pages, the student version | <a href="https://github.com/ISC-HEI/isc-hei-exam/blob/main/examples/exam-sol.pdf?raw=true">exam-sol.pdf</a> — the same source with the answers |
+| <a href="https://github.com/ISC-HEI/isc-hei-exam/blob/v0.1.0/examples/exam.pdf?raw=true"><img src="https://raw.githubusercontent.com/ISC-HEI/isc-hei-exam/v0.1.0/thumbnail.png" width="230" alt="Cover of the sample exam"></a> | <a href="https://github.com/ISC-HEI/isc-hei-exam/blob/v0.1.0/examples/exam.pdf?raw=true">exam.pdf</a> — 12 pages, the student version | <a href="https://github.com/ISC-HEI/isc-hei-exam/blob/v0.1.0/examples/exam-sol.pdf?raw=true">exam-sol.pdf</a> — the same source with the answers |
 
-The series flavour: [`series.pdf`](https://github.com/ISC-HEI/isc-hei-exam/blob/main/examples/series.pdf?raw=true) and [`series-sol.pdf`](https://github.com/ISC-HEI/isc-hei-exam/blob/main/examples/series-sol.pdf?raw=true).
+The series flavour: [`series.pdf`](https://github.com/ISC-HEI/isc-hei-exam/blob/v0.1.0/examples/series.pdf?raw=true) and [`series-sol.pdf`](https://github.com/ISC-HEI/isc-hei-exam/blob/v0.1.0/examples/series-sol.pdf?raw=true).
 
 ## Features
 
@@ -48,7 +48,7 @@ typst compile --input solutions=true exam.typ exam-sol.pdf
 typst compile series.typ
 ```
 
-The body font is **Source Sans 3** (the LaTeX template used its predecessor Source Sans Pro). It is available in the Typst web app; locally, run `bash fonts/install_fonts.sh` once (the ISC font bundle, SIL Open Font License, Linux and macOS) and check that `typst fonts` lists it. When it is missing, the document renders a single page telling you so instead of silently using another font; pass `check-fonts: false` to render anyway. Code uses DejaVu Sans Mono, which ships with Typst.
+The body font is **Source Sans 3** (the LaTeX template used its predecessor Source Sans Pro). It is available in the Typst web app; locally, run [`fonts/install_fonts.sh`](https://github.com/ISC-HEI/isc-hei-exam/blob/v0.1.0/fonts/install_fonts.sh) from the repository once (the ISC font bundle, SIL Open Font License, Linux and macOS; the script is not part of the package) and check that `typst fonts` lists it. When it is missing, the document renders a single page telling you so instead of silently using another font; pass `check-fonts: false` to render anyway. Code uses DejaVu Sans Mono, which ships with Typst.
 
 ## Writing an exam
 
@@ -172,7 +172,7 @@ Known differences: the "Listing continues on next page…" notes of `mdframed` a
 tools/compare-exam.sh exam.typ reference.pdf reference-sol.pdf
 ```
 
-renders the Typst document in both modes next to the LaTeX PDFs, one PNG per page (LaTeX left, Typst right), compares the page counts and the question structure of every page. See [`CONTRIBUTING.md`](https://github.com/ISC-HEI/isc-hei-exam/blob/main/CONTRIBUTING.md) for the development and release workflow.
+renders the Typst document in both modes next to the LaTeX PDFs, one PNG per page (LaTeX left, Typst right), compares the page counts and the question structure of every page. See [`CONTRIBUTING.md`](https://github.com/ISC-HEI/isc-hei-exam/blob/v0.1.0/CONTRIBUTING.md) for the development and release workflow.
 
 ## Dependencies
 
@@ -181,7 +181,7 @@ Only Typst is needed to write exams. The rest serves the development and the com
 | Tool | Required for | Linux (Debian/Ubuntu) | macOS (Homebrew) |
 | --- | --- | --- | --- |
 | **typst** ≥ 0.15 | compiling | [GitHub release](https://github.com/typst/typst/releases) | `brew install typst` |
-| **Source Sans 3** | the body font | `bash fonts/install_fonts.sh` | `bash fonts/install_fonts.sh` |
+| **Source Sans 3** | the body font | [`fonts/install_fonts.sh`](https://github.com/ISC-HEI/isc-hei-exam/blob/v0.1.0/fonts/install_fonts.sh) | [`fonts/install_fonts.sh`](https://github.com/ISC-HEI/isc-hei-exam/blob/v0.1.0/fonts/install_fonts.sh) |
 | **just** | the development recipes | `apt install just` | `brew install just` |
 | **poppler-utils** | tests, `compare-exam.sh` | `apt install poppler-utils` | `brew install poppler` |
 | **ImageMagick** | the comparison montages | `apt install imagemagick` | `brew install imagemagick` |
@@ -191,7 +191,7 @@ Only Typst is needed to write exams. The rest serves the development and the com
 
 ## License
 
-Copyright © 2026 P.-A. Mudry / ISC — HES-SO Valais. Released under the [MIT License](https://github.com/ISC-HEI/isc-hei-exam/blob/main/LICENSE). The ISC and HES-SO logos shipped in `assets/` are the marks of their institutions and are not covered by that licence.
+Copyright © 2026 P.-A. Mudry / ISC — HES-SO Valais. Released under the [MIT License](https://github.com/ISC-HEI/isc-hei-exam/blob/v0.1.0/LICENSE). The ISC and HES-SO logos shipped in `assets/` are the marks of their institutions and are not covered by that licence.
 
 ---
 
